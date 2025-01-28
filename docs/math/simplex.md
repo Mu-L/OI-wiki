@@ -1,6 +1,8 @@
-## 作用
+## 定义
 
-单纯形法是解决线性规划问题的一个有效的算法。线性规划就是在一组线性约束条件下，求解目标函数最优解的问题。
+单纯形法是解决线性规划问题的一个有效的算法。
+
+线性规划就是在一组线性约束条件下，求解目标函数最优解的问题。
 
 ## 线性规划的一般形式
 
@@ -38,8 +40,8 @@ $$
 
 $$
 s.t \begin{cases}  
-\displaystyle \sum_{j = 1}^{n}a_{ij}x_j = b_j, i = 1,2,...,m\\ 
-x_j \geq 0 , j = 1,2,...,n  \\
+\displaystyle \sum_{j = 1}^{n}a_{ij}x_j = b_i, i = 1,2,\dots,m\\ 
+x_j \geq 0 , j = 1,2,\dots,n  \\
 \end{cases}
 $$
 
@@ -69,52 +71,53 @@ $$
 
 标准形的形式为：
 
-- 1）目标函数要求 $\max$
+1.  目标函数要求 $\max$
 
-- 2）约束条件均为等式
+2.  约束条件均为等式
 
-- 3）决策变量为非负约束
+3.  决策变量为非负约束
 
 普通线性规划化为标准形：
 
-- 1）若目标函数为最小化，可以通过取负，求最大化
-- 2）约束不等式为小于等于不等式，可以在左端加入非负变量，转变为等式，比如：
+1.  若目标函数为最小化，可以通过取负，求最大化
 
-$$
-x_1 + 2x_2 \leq 9 \Rightarrow 
-\begin{cases}  
-x_1 + 2x_2 + x_3 = 9\\ 
-x_3 \geq 0
-\end{cases}
-$$
+2.  约束不等式为小于等于不等式，可以在左端加入非负变量，转变为等式，比如：
 
-同理，约束不等式为大于等于不等式时，可以在左端减去一个非负松弛变量，变为等式。
+    $$
+    x_1 + 2x_2 \leq 9 \implies
+    \begin{cases}
+      x_1 + 2x_2 + x_3 = 9 \\
+      x_3 \geq 0
+    \end{cases}
+    $$
 
-- 3）若存在取值无约束的变量，可转变为两个非负变量的差，比如：
+    同理，约束不等式为大于等于不等式时，可以在左端减去一个非负松弛变量，变为等式。
 
-$$
--\infty \leq x_k \leq +\infty \Rightarrow
-\begin{cases}  
-x_k = x_m - x_n\\ 
-x_m,x_n \geq 0
-\end{cases}
-$$
+3.  若存在取值无约束的变量，可转变为两个非负变量的差，比如：
+
+    $$
+    -\infty \leq x_k \leq +\infty \implies
+    \begin{cases}
+      x_k = x_m - x_n \\
+      x_m,x_n \geq 0
+    \end{cases}
+    $$
 
 本文最开始的线性规划问题转化为标准形为：
 
 $$
-max \ z = x_1 + x_2
+\max \ z = x_1 + x_2
 $$
 
 $$
-s.t \begin{cases}  
-2x_1 + x_2 + x_3 = 12 \\ 
-x_1 + 2x_2 + x_4 = 9  \\
-x_1, x_2, x_3, x_4 \geq 0
+s.t \begin{cases}
+  2x_1 + x_2 + x_3 = 12 \\
+  x_1 + 2x_2 + x_4 = 9  \\
+  x_1, x_2, x_3, x_4 \geq 0
 \end{cases}
 $$
 
-## 单纯形法
+## 单纯形法的思想与例子
 
 ### 几何意义
 
@@ -146,15 +149,25 @@ x_1, x_2, x_3, x_4 \geq 0
 \end{cases}
 $$
 
-如果选择 $x_2$、$x_3$ 为基变量，那么令 $x_1$、$x_4$ 等于 $0$，可以去求解基变量 $x_2$、$x_3$ 的值。对系数矩阵做行变换，如下所示，$x_2=9/2$，$x_3=15/2$。
+如果选择 $x_2$、$x_3$ 为基变量，那么令 $x_1$、$x_4$ 等于 $0$，可以去求解基变量 $x_2$、$x_3$ 的值。对系数矩阵做行变换，如下所示，$x_2=\dfrac{9}{2}$，$x_3=\dfrac{15}{2}$。
 
 $$
-\left[\begin{array}{cccccc}{\mathrm{X}} & {x_{1}} & {x_{2}} & {x_{3}} & {x_{4}} & {b} \\ {} & {2} & {1} & {1} & {0} & {12} \\ {} & {1} & {2} & {0} & {1} & {9} \\ {\mathrm{C}} & {1} & {1} & {0} & {0} & {z}\end{array}\right] \rightarrow\left[\begin{array}{cccccc}{\mathrm{X}} & {x_{1}} & {x_{2}} & {x_{3}} & {x_{4}} & {b} \\ {} & {\frac{3}{2}} & {0} & {1} & {-\frac{1}{2}} & {\frac{15}{2}} \\ {} & {\frac{1}{2}} & {1} & {0} & {\frac{1}{2}} & {\frac{9}{2}} \\ {\mathrm{C}} & {\frac{1}{2}} & {0} & {0} & {-\frac{1}{2}} & {z-\frac{9}{2}}\end{array}\right]
+\begin{bmatrix}
+  {\mathrm{X}} & {x_{1}} & {x_{2}} & {x_{3}} & {x_{4}} & {b} \\
+  {} & {2} & {1} & {1} & {0} & {12} \\
+  {} & {1} & {2} & {0} & {1} & {9} \\
+  {\mathrm{C}} & {1} & {1} & {0} & {0} & {z}
+\end{bmatrix}\to\begin{bmatrix}
+  {\mathrm{X}} & {x_{1}} & {x_{2}} & {x_{3}} & {x_{4}} & {b} \\
+  {} & {\frac{3}{2}} & {0} & {1} & {-\frac{1}{2}} & {\frac{15}{2}} \\
+  {} & {\frac{1}{2}} & {1} & {0} & {\frac{1}{2}} & {\frac{9}{2}} \\
+  {\mathrm{C}} & {\frac{1}{2}} & {0} & {0} & {-\frac{1}{2}} & {z-\frac{9}{2}}
+\end{bmatrix}
 $$
 
-$X_1=0$ 表示可行解在 $x$ 轴上；$X_4=0$ 表示可行解在 $x_1+2x_2=9$ 的直线上。那么，求得的可行解即表示这两条直线的交点，也是可行域的顶点，如图所示：
+$X_1=0$ 表示可行解在 $y$ 轴上；$X_4=0$ 表示可行解在 $x_1+2x_2=9$ 的直线上。那么，求得的可行解即表示这两条直线的交点，也是可行域的顶点，如图所示：
 
-![kexingyu_point](./images/kexingyu_point.jpg)
+![kexingyu\_point](./images/kexingyu_point.jpg)
 
 <center>图2</center>
 
@@ -189,16 +202,26 @@ $$
 继续通过上面的例子来说明：
 
 $$
-\left[\begin{array}{cccccc}{\mathrm{X}} & {x_{1}} & {x_{2}} & {x_{3}} & {x_{4}} & {b} \\ {} & {2} & {1} & {1} & {0} & {12} \\ {} & {1} & {2} & {0} & {1} & {9} \\ {\mathrm{C}} & {1} & {1} & {0} & {0} & {z}\end{array}\right] \rightarrow\left[\begin{array}{cccccc}{\mathrm{X}} & {x_{1}} & {x_{2}} & {x_{3}} & {x_{4}} & {b} \\ {} & {\frac{3}{2}} & {0} & {1} & {-\frac{1}{2}} & {\frac{15}{2}} \\ {} & {\frac{1}{2}} & {1} & {0} & {\frac{1}{2}} & {\frac{9}{2}} \\ {\mathrm{C}} & {\frac{1}{2}} & {0} & {0} & {-\frac{1}{2}} & {z-\frac{9}{2}}\end{array}\right]
+\begin{bmatrix}
+  {\mathrm{X}} & {x_{1}} & {x_{2}} & {x_{3}} & {x_{4}} & {b} \\
+  {} & {2} & {1} & {1} & {0} & {12} \\
+  {} & {1} & {2} & {0} & {1} & {9} \\
+  {\mathrm{C}} & {1} & {1} & {0} & {0} & {z}
+\end{bmatrix}\to\begin{bmatrix}
+  {\mathrm{X}} & {x_{1}} & {x_{2}} & {x_{3}} & {x_{4}} & {b} \\
+  {} & {\frac{3}{2}} & {0} & {1} & {-\frac{1}{2}} & {\frac{15}{2}} \\
+  {} & {\frac{1}{2}} & {1} & {0} & {\frac{1}{2}} & {\frac{9}{2}} \\
+  {\mathrm{C}} & {\frac{1}{2}} & {0} & {0} & {-\frac{1}{2}} & {z-\frac{9}{2}}
+\end{bmatrix}
 $$
 
-从最后一行可以看到，$x_1$ 的系数为 $1/2>0$，所以选 $x_2$、$x_3$ 为基变量并没有是目标函数达到最优。下一轮选取 $x_1$ 作为基变量，替换 $x_2$、$x_3$ 中的某个变量。
+从最后一行可以看到，$x_1$ 的系数为 $\dfrac{1}{2}>0$，所以选 $x_2$、$x_3$ 为基变量并没有使目标函数达到最优。下一轮选取 $x_1$ 作为基变量，替换 $x_2$、$x_3$ 中的某个变量。
 
 第一行是符号
 
-第二行：若 $x_1$ 替换 $x_3$ 作为基变量，$x_3=0$ 时，$x_1=\dfrac{\dfrac{15}{2}}{\dfrac{3}{2}}=5$
+第二行：若 $x_1$ 替换 $x_3$ 作为基变量，$x_3=0$ 时，$x_1=\dfrac{15/2}{3/2}=5$
 
-第三行：若 $x_1$ 替换 $x_2$ 作为基变量，$x_2=0$ 时，$x_1=\dfrac{\dfrac{9}{2}}{\dfrac{1}{2}}=9$
+第三行：若 $x_1$ 替换 $x_2$ 作为基变量，$x_2=0$ 时，$x_1=\dfrac{9/2}{1/2}=9$
 
 尽管替换 $x_2$ 后，$x_1$ 的值更大，但将它代入 $x_3$ 后会发现 $x_3$ 的值为负，不满足约束。从几何的角度来看，选择 $x_2$ 和 $x_4$ 作为非基变量，得到的解是直线 $x_2=0$ 和 $x_1 + 2x_2 = 9$ 的交点，它在可行域外。因此应该选择 $x_3$ 作为非基变量。
 
@@ -259,7 +282,7 @@ $$
 
 其实我们由于每个 $x$ 都大于零，对于 $x_2$ 它的增加是有所限制的，如果 $x_2$ 过大，由于其他的限制条件，就会使得其他的 $x$ 小于零，于是我们应该让 $x_2$ 一直增大，直到有一个其他的 $x$ 刚好等于 $0$ 为止，那么这个 $x$ 就被换出轴。
 
-我们可以发现，对于约束方程 $1$，即第一行约束，$x_2$ 最大可以为 $4$（$4/1$），对于约束方程 $4$，$x_2$ 最大可以为 $2$（$6/3$），因此 $x_2$ 最大只能为他们之间最小的那个，这样才能保证每个 $x$ 都大于零。因此使用第 $4$ 行，来对各行进行高斯行变换，使得第二列第四行中的每个 $x$ 都变成零，也包括 $c_2$。这样我们就完成了把 $x_2$ 入轴，$x_7$ 出轴的过程。变换后的单纯形表为：
+我们可以发现，对于约束方程 $1$，即第一行约束，$x_2$ 最大可以为 $4$（$\dfrac{4}{1}$），对于约束方程 $4$，$x_2$ 最大可以为 $2$（$\dfrac{6}{3}$），因此 $x_2$ 最大只能为他们之间最小的那个，这样才能保证每个 $x$ 都大于零。因此使用第 $4$ 行，来对各行进行高斯行变换，使得第二列第四行中的每个 $x$ 都变成零，也包括 $c_2$。这样我们就完成了把 $x_2$ 入轴，$x_7$ 出轴的过程。变换后的单纯形表为：
 
 | $x_1$   | $x_2$   | $x_3$      | $x_4$   | $x_5$   | $x_6$   | $x_7$       | $b$      |
 | ------- | ------- | ---------- | ------- | ------- | ------- | ----------- | -------- |
@@ -283,149 +306,7 @@ $$
 
 此时我们发现，所有非轴的 $x$ 的系数全部小于零，即增大任何非轴的 $x$ 值并不能使得目标函数最大，从而得到最优解 $32$。
 
-整个过程代码如下所示：
-
-```c++
-#include <bits/stdc++.h>
-using namespace std;
-vector<vector<double> > Matrix;
-double Z;
-set<int> P;
-size_t cn, bn;
-
-bool Pivot(pair<size_t, size_t> &p) {  // 返回0表示所有的非轴元素都小于0
-  int x = 0, y = 0;
-  double cmax = -INT_MAX;
-  vector<double> C = Matrix[0];
-  vector<double> B;
-
-  for (size_t i = 0; i < bn; i++) {
-    B.push_back(Matrix[i][cn - 1]);
-  }
-
-  for (size_t i = 0; i < C.size(); i++) {  // 在非轴元素中找最大的c
-    if (cmax < C[i] && P.find(i) == P.end()) {
-      cmax = C[i];
-      y = i;
-    }
-  }
-  if (cmax < 0) {
-    return 0;
-  }
-
-  double bmin = INT_MAX;
-  for (size_t i = 1; i < bn; i++) {
-    double tmp = B[i] / Matrix[i][y];
-    if (Matrix[i][y] != 0 && bmin > tmp) {
-      bmin = tmp;
-      x = i;
-    }
-  }
-
-  p = make_pair(x, y);
-
-  for (set<int>::iterator it = P.begin(); it != P.end(); it++) {
-    if (Matrix[x][*it] != 0) {
-      // cout<<"erase "<<*it<<endl;
-      P.erase(*it);
-      break;
-    }
-  }
-  P.insert(y);
-  // cout<<"add "<<y<<endl;
-  return true;
-}
-
-void pnt() {
-  for (size_t i = 0; i < Matrix.size(); i++) {
-    for (size_t j = 0; j < Matrix[0].size(); j++) {
-      cout << Matrix[i][j] << "\t";
-    }
-    cout << endl;
-  }
-  cout << "result z:" << -Matrix[0][cn - 1] << endl;
-}
-
-void Gaussian(pair<size_t, size_t> p) {  // 行变换
-  size_t x = p.first;
-  size_t y = p.second;
-  double norm = Matrix[x][y];
-  for (size_t i = 0; i < cn; i++) {  // 主行归一化
-    Matrix[x][i] /= norm;
-  }
-  for (size_t i = 0; i < bn; i++) {
-    if (i != x && Matrix[i][y] != 0) {
-      double tmpnorm = Matrix[i][y];
-      for (size_t j = 0; j < cn; j++) {
-        Matrix[i][j] = Matrix[i][j] - tmpnorm * Matrix[x][j];
-      }
-    }
-  }
-}
-
-void solve() {
-  pair<size_t, size_t> t;
-  while (1) {
-    pnt();
-    if (Pivot(t) == 0) {
-      return;
-    }
-    cout << t.first << " " << t.second << endl;
-    for (set<int>::iterator it = P.begin(); it != P.end(); it++) {
-      cout << *it << " ";
-    }
-    cout << endl;
-    Gaussian(t);
-  }
-}
-
-int main(int argc, char *argv[]) {
-  // ifstream fin;
-  // fin.open("./test");
-  cin >> cn >> bn;
-  for (size_t i = 0; i < bn; i++) {
-    vector<double> vectmp;
-    for (size_t j = 0; j < cn; j++) {
-      double tmp = 0;
-      cin >> tmp;
-      vectmp.push_back(tmp);
-    }
-    Matrix.push_back(vectmp);
-  }
-
-  for (size_t i = 0; i < bn - 1; i++) {
-    P.insert(cn - i - 2);
-  }
-  solve();
-}
-/////////////////////////////////////
-// glpk input:
-///* Variables */
-// var x1 >= 0;
-// var x2 >= 0;
-// var x3 >= 0;
-///* Object function */
-// maximize z: x1 + 14*x2 + 6*x3;
-///* Constrains */
-// s.t. con1: x1 + x2 + x3 <= 4;
-// s.t. con2: x1  <= 2;
-// s.t. con3: x3  <= 3;
-// s.t. con4: 3*x2 + x3  <= 6;
-// end;
-/////////////////////////////////////
-// myinput:
-/*
-8 5
-1 14 6 0 0 0 0 0
-1 1 1 1 0 0 0 4
-1 0 0 0 1 0 0 2
-0 0 1 0 0 1 0 3
-0 3 1 0 0 0 1 6
-*/
-/////////////////////////////////////
-```
-
-## 理论罗列
+## 单纯形法的具体实现
 
 ### 标准型
 
@@ -441,7 +322,7 @@ $$
 x_j \geq 0,j = 1,2,\ldots,n
 $$
 
-$n$ 个变量，$m+n$ 个约束，构造 $m * n$ 的矩阵 $A$，$m$ 维向量 $b$，$n$ 维向量 $c$
+$n$ 个变量，$m+n$ 个约束，构造 $m \times n$ 的矩阵 $A$，$m$ 维向量 $b$，$n$ 维向量 $c$
 
 最大化 $C^Tx$ 满足如下约束条件：
 
@@ -473,16 +354,16 @@ $$
 
 ### 变量
 
-- 替入变量 $x_e$（非基变量）
-- 替出变量 $x_l$（基本变量）
+-   替入变量 $x_e$（非基变量）
+-   替出变量 $x_l$（基本变量）
 
 ### 可行解
 
-- 基本解：所有非基变量设为 $0$，基本变量为右侧的常数
+-   基本解：所有非基变量设为 $0$，基本变量为右侧的常数
 
-- 基本可行解：所有 $b_i \geq 0$
+-   基本可行解：所有 $b_i \geq 0$
 
-> 注：单纯形法的过程中 B 和 N 不断交换，在 n 维空间中不断走，“相当于不等式上的高斯消元”。
+> 注：单纯形法的过程中 $B$ 和 $N$ 不断交换，在 $n$ 维空间中不断走，「相当于不等式上的高斯消元」。
 
 ### 转轴
 
@@ -494,26 +375,28 @@ $$
 
 在所有 $b_i < 0$ 的约束中随机选一个作为 $x_l$，再随机选一个 $a_{le} < 0$ 作为 $x_e$，然后 $pivot(l,e)$ 后 $b_i$ 就变正了。
 
+如果不存在这样的 $x_l$，那么说明原问题无解。
+
 ## 算法实现
 
-每个约束定义了 $n$ 维空间中的一个半空间（超平面），交集形成的可行域是一个凸区域称为单纯形。目标函数是一个超平面，最优解在凸区域定点处取得。通过不断的转轴操作，在 $n$ 维凸区域的顶点上不断移动（转轴），使得基本解的目标值不断变大，最终达到最优解。
+每个约束定义了 $n$ 维空间中的一个半空间（超平面），交集形成的可行域是一个凸区域称为单纯形。目标函数是一个超平面，最优解在凸区域定点处取得。通过不断的转轴操作，在 $n$ 维凸区域的顶点上不断移动（转轴），使得基本解的目标值不断变大，最终达到最优解。如果基本解的目标值没有上限，那么说明原问题无界。
 
 > 以下问题可以转换为单纯形：
 >
-> - 最短路
-> - 最大流
-> - 最小费用最大流
-> - 多商品流
+> -   最短路
+> -   最大流
+> -   最小费用最大流
+> -   多商品流
 
 基本思想就是改写 $l$ 这个约束为 $x_e$ 作为基本变量，然后把这个新 $x_e$ 的值带到其他约束和目标函数中，就消去 $x_e$ 了。改写和带入时要修改 $b$ 和 $a$，目标函数则是 $c$ 和 $v$。
 
 转动时，$l$ 和 $e$ 并没有像算法导论上一样，$a$ 矩阵用了两行分别是 $a_{l, \square}$ 和 $a_{e, \square}$（这样占用内存大），而是用了同一行，这样 $a$ 矩阵的行数 $=|B|$，列数 $=|N|$。
 
-也就是说，约束条件只用 $m$ 个，尽管 $B$ 和 $N$ 不断交换，但同一时间还是只有 $m$ 个约束（基本变量），$n$ 个非基变量，注意改写成松弛型后 $a$ 矩阵实际系数为负。（一个优化为 $a_{i,e}$ 的约束没必要带入了。
+也就是说，约束条件只用 $m$ 个，尽管 $B$ 和 $N$ 不断交换，但同一时间还是只有 $m$ 个约束（基本变量），$n$ 个非基变量，注意改写成松弛型后 $a$ 矩阵实际系数为负。（一个优化为 $a_{i,e}$ 的约束没必要带入了）。
 
 `simplex` 是主过程，基本思想是找到一个 $c_e>0$ 的，然后找对这个 $e$ 限制最紧的 $l$，转动这组 $l,e$，注意精度控制 $\epsilon$，$c_e>\epsilon$，还有找 $l$ 的时候 $a_{i,e}>\epsilon$ 才行。
 
-??? note " 例题[「NOI2008」志愿者招募](https://www.luogu.com.cn/problem/P3980)"
+??? note " 例题 [「NOI2008」志愿者招募](https://www.luogu.com.cn/problem/P3980)"
     题目大意：长度为 $n$ 的序列，第 $i$ 位至少 $b_i$，$m$ 种区间使 $[l_i,r_i] + 1$ 代价为 $a_i$。
 
 原始问题 $m$ 个变量，$n$ 个约束，当 $l_j \leq i \leq r_j$，$a_{ij} = 1$。
@@ -521,7 +404,7 @@ $$
 对偶问题 $n$ 个变量，$m$ 个约束
 
 $$
-\max \ \sum_{i=1}nb_iy_i
+\max \ \sum_{i=1}^n b_iy_i
 $$
 
 $$
@@ -531,78 +414,7 @@ $$
 把对应出的系数矩阵代入到单纯形算法就可以求出最优解了。
 
 ```c++
-#include <algorithm>
-#include <cmath>
-#include <cstdio>
-#include <cstring>
-#include <iostream>
-using namespace std;
-typedef long long ll;
-const int M = 10005, N = 1005, INF = 1e9;
-const double eps = 1e-6;
-inline int read() {
-  char c = getchar();
-  int x = 0, f = 1;
-  while (c < '0' || c > '9') {
-    if (c == '-') f = -1;
-    c = getchar();
-  }
-  while (c >= '0' && c <= '9') {
-    x = x * 10 + c - '0';
-    c = getchar();
-  }
-  return x * f;
-}
-
-int n, m;
-double a[M][N], b[M], c[N], v;
-void pivot(int l, int e) {
-  b[l] /= a[l][e];
-  for (int j = 1; j <= n; j++)
-    if (j != e) a[l][j] /= a[l][e];
-  a[l][e] = 1 / a[l][e];
-
-  for (int i = 1; i <= m; i++)
-    if (i != l && fabs(a[i][e]) > 0) {
-      b[i] -= a[i][e] * b[l];
-      for (int j = 1; j <= n; j++)
-        if (j != e) a[i][j] -= a[i][e] * a[l][j];
-      a[i][e] = -a[i][e] * a[l][e];
-    }
-
-  v += c[e] * b[l];
-  for (int j = 1; j <= n; j++)
-    if (j != e) c[j] -= c[e] * a[l][j];
-  c[e] = -c[e] * a[l][e];
-
-  // swap(B[l],N[e])
-}
-
-double simplex() {
-  while (true) {
-    int e = 0, l = 0;
-    for (e = 1; e <= n; e++)
-      if (c[e] > eps) break;
-    if (e == n + 1) return v;
-    double mn = INF;
-    for (int i = 1; i <= m; i++)
-      if (a[i][e] > eps && mn > b[i] / a[i][e]) mn = b[i] / a[i][e], l = i;
-    if (mn == INF) return INF;  // unbounded
-    pivot(l, e);
-  }
-}
-
-int main() {
-  n = read();
-  m = read();
-  for (int i = 1; i <= n; i++) c[i] = read();
-  for (int i = 1; i <= m; i++) {
-    int s = read(), t = read();
-    for (int j = s; j <= t; j++) a[i][j] = 1;
-    b[i] = read();
-  }
-  printf("%d", (int)(simplex() + 0.5));
-}
+--8<-- "docs/math/code/simplex/simplex_1.cpp"
 ```
 
 ## 对偶原理
@@ -614,7 +426,7 @@ $$
 $$
 
 $$
-\min \ b^Ty: A^Ty \geq c, t \geq 0
+\min \ b^Ty: A^Ty \geq c, y \geq 0
 $$
 
 $d_{uv}$ 表示 $u,v$ 是否匹配
@@ -645,30 +457,25 @@ p_u, p_v \geq 0
 \end{cases}
 $$
 
-## 全幺模矩阵（Totally Unimodular Matrix)
+## 全幺模矩阵（Totally Unimodular Matrix）
 
-**充分条件：**
+当一个矩阵的任意一个子方阵的行列式都为 $\pm1,0$ 时，我们称这个矩阵是全幺模的。
 
-- 仅有 $-1,0,1$ 构成
+如果单纯形矩阵是全幺模的，那么单纯形就具有整数解。
 
-- 每列至多两个非零数
-
--   行可分为两个集合：
-    - 一列包含两个同号非零数，两行不在同一个集合
-    - 一列包含两个异号非零数，两行在同一个集合
+???+ note "证明"
+    在线性规划中，最优解通常位于由约束条件形成的可行域的边界上。具体来说，它位于这个高维多面体的顶点处。这些顶点可以通过将部分线性独立的不等式约束转化为等式，然后求解得到的线性方程组来确定。如果约束矩阵是全幺模的（即每个方阵子矩阵的行列式为 $0$、$1$ 或 $-1$），那么根据克莱姆法则（Cramer's rule），这些线性方程组的解将是整数。
 
 线性规划中 $A$ 为全幺模矩阵，则单纯形法过程中所有系数 $\in -1,0,1$，可以去除系数为 $0$ 的项进行优化！
 
 > 注：**任何最大流、最小费用最大流的线性规划都是全幺模矩阵**
 
-更多详细的解释参看：<https://www.cnblogs.com/ECJTUACM-873284962/p/7097864.html>
-
 ## 习题练习
 
-- [UOJ#179. 线性规划](https://uoj.ac/problem/179)
+-   [UOJ#179. 线性规划](https://uoj.ac/problem/179)
 
 ## 参考资料
 
-- [线性规划之单纯形法【超详解 + 图解】](https://www.cnblogs.com/ECJTUACM-873284962/p/7097864.html)
-- [2016 国家集训队论文](https://github.com/OI-wiki/libs/blob/master/%E9%9B%86%E8%AE%AD%E9%98%9F%E5%8E%86%E5%B9%B4%E8%AE%BA%E6%96%87/%E5%9B%BD%E5%AE%B6%E9%9B%86%E8%AE%AD%E9%98%9F2016%E8%AE%BA%E6%96%87%E9%9B%86.pdf)
-- 算法导论
+-   [线性规划之单纯形法【超详解 + 图解】](https://www.cnblogs.com/ECJTUACM-873284962/p/7097864.html)
+-   [2016 国家集训队论文](https://github.com/OI-wiki/libs/blob/master/%E9%9B%86%E8%AE%AD%E9%98%9F%E5%8E%86%E5%B9%B4%E8%AE%BA%E6%96%87/%E5%9B%BD%E5%AE%B6%E9%9B%86%E8%AE%AD%E9%98%9F2016%E8%AE%BA%E6%96%87%E9%9B%86.pdf)
+-   算法导论

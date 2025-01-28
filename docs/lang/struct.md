@@ -1,9 +1,11 @@
 author: Ir1d, cjsoft, Lans1ot
-结构体（struct），可以看做是一系列称为成员元素的组合体。
+
+**结构体**（struct），可以看做是一系列称为成员元素的组合体。
 
 可以看做是自定义的数据类型。
 
-*本页描述的 `struct` 不同于 C 中 `struct`，在 C++ 中 `struct` 被扩展为类似 [`class`](./class.md) 的类说明符*。
+???+ note
+    本页描述的 `struct` 不同于 C 中 `struct`，在 C++ 中 `struct` 被扩展为类似 [`class`](./class.md) 的类说明符。
 
 ## 定义结构体
 
@@ -43,13 +45,9 @@ struct Edge {
 
 ## 访问/修改成员元素
 
-可以使用 `变量名.成员元素名` 进行访问。
+可以使用 `变量名.成员元素名` 进行访问。例如可以使用 `cout << var.v` 来输出 `var` 的 `v` 成员。
 
-如 : 输出 `var` 的 `v` 成员：`cout << var.v`。
-
-也可以使用 `指针名->成员元素名` 或者 使用 `(*指针名).成员元素名` 进行访问。
-
-如 : 将结构体指针 `ptr` 指向的结构体的成员元素 `v` 赋值为 `tmp`：`(*ptr).v = tmp` 或者 `ptr->v = tmp`。
+也可以使用 `指针名->成员元素名` 或者 使用 `(*指针名).成员元素名` 进行访问。例如使用 `(*ptr).v = tmp` 或者 `ptr->v = tmp` 可以将结构体指针 `ptr` 指向的结构体的成员元素 `v` 赋值为 `tmp`：。
 
 ## 为什么需要结构体？
 
@@ -63,9 +61,14 @@ struct Edge {
 
 ## 更多的操作？
 
-详见 [类](./class.md)
+详见 [类](./class.md)。
+
+## 注意事项
+
+为了访问内存的效率更高，编译器在处理结构中成员的实际存储情况时，可能会将成员对齐在一定的字节位置，也就意味着结构中有空余的地方。因此，该结构所占用的空间可能大于其中所有成员所占空间的总和。
 
 ## 参考资料
 
-1. [cppreference class](https://zh.cppreference.com/w/cpp/language/class)
-2. [cplusplus Data structures](http://www.cplusplus.com/doc/tutorial/structures/)
+1.  [Class - zh.cppreference.com](https://zh.cppreference.com/w/cpp/language/class)
+2.  [Data structures - cplusplus.com](http://www.cplusplus.com/doc/tutorial/structures/)
+3.  [对齐方式 - Microsoft Docs](https://docs.microsoft.com/zh-cn/cpp/cpp/alignment-cpp-declarations)

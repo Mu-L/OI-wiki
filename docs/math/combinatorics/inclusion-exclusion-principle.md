@@ -1,6 +1,6 @@
-## 入门
+## 引入
 
-???+note "入门例题"
+???+ note "入门例题"
     假设班里有 $10$ 个学生喜欢数学，$15$ 个学生喜欢语文，$21$ 个学生喜欢编程，班里至少喜欢一门学科的有多少个学生呢？
 
 是 $10+15+21=46$ 个吗？不是的，因为有些学生可能同时喜欢数学和语文，或者语文和编程，甚至还有可能三者都喜欢。
@@ -15,15 +15,15 @@ $$
 
 把上述问题推广到一般情况，就是我们熟知的容斥原理。
 
-## 容斥原理
+## 定义
 
 设 U 中元素有 n 种不同的属性，而第 i 种属性称为 $P_i$，拥有属性 $P_i$ 的元素构成集合 $S_i$，那么
 
 $$
-\begin{split}
+\begin{aligned}
 \left|\bigcup_{i=1}^{n}S_i\right|=&\sum_{i}|S_i|-\sum_{i<j}|S_i\cap S_j|+\sum_{i<j<k}|S_i\cap S_j\cap S_k|-\cdots\\
 &+(-1)^{m-1}\sum_{a_i<a_{i+1} }\left|\bigcap_{i=1}^{m}S_{a_i}\right|+\cdots+(-1)^{n-1}|S_1\cap\cdots\cap S_n|
-\end{split}
+\end{aligned}
 $$
 
 即
@@ -37,13 +37,13 @@ $$
 对于每个元素使用二项式定理计算其出现的次数。对于元素 x，假设它出现在 $T_1,T_2,\cdots,T_m$ 的集合中，那么它的出现次数为
 
 $$
-\begin{split}
+\begin{aligned}
 Cnt=&|\{T_i\}|-|\{T_i\cap T_j|i<j\}|+\cdots+(-1)^{k-1}\left|\left\{\bigcap_{i=1}^{k}T_{a_i}|a_i<a_{i+1}\right\}\right|\\
 &+\cdots+(-1)^{m-1}|\{T_1\cap\cdots\cap T_m\}|\\
-=&C_m^1-C_m^2+\cdots+(-1)^{m-1}C_m^m\\
-=&C_m^0-\sum_{i=0}^m(-1)^iC_m^i\\
+=&\dbinom{m}{1}-\dbinom{m}{2}+\cdots+(-1)^{m-1}\dbinom{m}{m}\\
+=&\dbinom{m}{0}-\sum_{i=0}^m(-1)^i\dbinom{m}{i}\\
 =&1-(1-1)^m=1
-\end{split}
+\end{aligned}
 $$
 
 于是每个元素出现的次数为 1，那么合并起来就是并集。证毕。
@@ -58,32 +58,32 @@ $$
 
 右边使用容斥即可。
 
-可能接触过容斥的读者都清楚上述内容，而更关心的是容斥的应用
+可能接触过容斥的读者都清楚上述内容，而更关心的是容斥的应用。
 
 那么接下来我们给出 3 个层次不同的例题来为大家展示容斥原理的应用。
 
 ## 不定方程非负整数解计数
 
-???+note "不定方程非负整数解计数"
-    给出不定方程 $\sum_{i=1}^nx_i=m$ 和 $n$ 个限制条件 $x_i\leq b_i$，其中 $m,b_i\leq \mathbb{N}$. 求方程的非负整数解的个数。
+???+ note "不定方程非负整数解计数"
+    给出不定方程 $\sum_{i=1}^nx_i=m$ 和 $n$ 个限制条件 $x_i\leq b_i$，其中 $m,b_i \in \mathbb{N}$. 求方程的非负整数解的个数。
 
 ### 没有限制时
 
-如果没有 $x_i<b_i$ 的限制，那么不定方程 $\sum_{i=1}^nx_i=m$ 的非负整数解的数目为 $C_{m+n-1}^{n-1}$.
+如果没有 $x_i<b_i$ 的限制，那么不定方程 $\sum_{i=1}^nx_i=m$ 的非负整数解的数目为 $\dbinom{m+n-1}{n-1}$.
 
 略证：插板法。
 
 相当于你有 $m$ 个球要分给 $n$ 个盒子，允许某个盒子是空的。这个问题不能直接用组合数解决。
 
-于是我们再加入 $n-1$ 个球，于是问题就变成了在一个长度为 $m+n-1$ 的球序列中选择 $n-1$ 个球，然后这个 $n-1$ 个球把这个序列隔成了 $n$ 份，恰好可以一一对应放到 $n$ 个盒子中。那么在 $m+n-1$ 个球中选择 $n-1$ 个球的方案数就是 $C_{m+n-1}^{n-1}$。
+于是我们再加入 $n-1$ 个球，于是问题就变成了在一个长度为 $m+n-1$ 的球序列中选择 $n-1$ 个球，然后这个 $n-1$ 个球把这个序列隔成了 $n$ 份，恰好可以一一对应放到 $n$ 个盒子中。那么在 $m+n-1$ 个球中选择 $n-1$ 个球的方案数就是 $\dbinom{m+n-1}{n-1}$。
 
 ### 容斥模型
 
 接着我们尝试抽象出容斥原理的模型：
 
-1. 全集 U：不定方程 $\sum_{i=1}^nx_i=m$ 的非负整数解
-2. 元素：变量 $x_i$.
-3. 属性：$x_i$ 的属性即 $x_i$ 满足的条件，即 $x_i\leq b_i$ 的条件
+1.  全集 U：不定方程 $\sum_{i=1}^nx_i=m$ 的非负整数解
+2.  元素：变量 $x_i$.
+3.  属性：$x_i$ 的属性即 $x_i$ 满足的条件，即 $x_i\leq b_i$ 的条件
 
 目标：所有变量满足对应属性时集合的大小，即 $|\bigcap_{i=1}^nS_i|$.
 
@@ -107,7 +107,7 @@ $$
 
 ## HAOI2008 硬币购物
 
-???+note "HAOI2008 硬币购物"
+???+ note "HAOI2008 硬币购物"
     4 种面值的硬币，第 i 种的面值是 $C_i$。$n$ 次询问，每次询问给出每种硬币的数量 $D_i$ 和一个价格 $S$，问付款方式。
     
     $n\leq 10^3,S\leq 10^5$.
@@ -124,75 +124,14 @@ $$
 
 ??? note "代码实现"
     ```cpp
-    #include <bits/stdc++.h>
-    #define int long long
-    using namespace std;
-    const int S = 1e5 + 5;
-    int c[5], d[5], n, s;
-    int f[S];
-    signed main() {
-      scanf("%lld%lld%lld%lld%lld", &c[1], &c[2], &c[3], &c[4], &n);
-      f[0] = 1;
-      for (int j = 1; j <= 4; j++)
-        for (int i = 1; i < S; i++)
-          if (i >= c[j]) f[i] += f[i - c[j]];
-      for (int i = 1; i <= n; i++) {
-        scanf("%lld%lld%lld%lld%lld", &d[1], &d[2], &d[3], &d[4], &s);
-        int ans = 0;
-        for (int i = 1; i < 16; i++) {
-          int m = s, bit = 0;
-          for (int j = 1; j <= 4; j++)
-            if ((i >> (j - 1)) & 1) m -= (d[j] + 1) * c[j], bit++;
-          if (m >= 0) ans += (bit % 2 * 2 - 1) * f[m];
-        }
-        printf("%lld\n", f[s] - ans);
-      }
-      return 0;
-    }
+    --8<-- "docs/math/code/inclusion-exclusion-principle/inclusion-exclusion-principle_1.cpp"
     ```
-
-## 错位排列计数
-
-???+note "错位排列计数"
-    对于 $1\sim n$ 的排列 $P$ 如果满足 $P_i\neq i$，则称 $P$ 是 $n$ 的错位排列。求 $n$ 的错位排列数。
-
-全集 $U$ 即为 $1\sim n$ 的排列，$|U|=n!$；属性就是 $P_i\neq i$. 套用补集的公式，问题变成求 $\left|\bigcup_{i=1}^n\overline{S_i}\right|$.
-
-我们知道 $\overline{S_i}$ 的含义是满足 $P_i=i$ 的排列的数量。用容斥原理把问题式子展开，我们需要对若干个特定的集合的交集求大小，即
-
-$$
-\left|\bigcap_{i=1}^{k}S_{a_i}\right|
-$$
-
-其中我们省略了 $a_i<a_{i+1}$ 的条件以方便表示。上述 $k$ 个集合的交集表示有 $k$ 个变量满足 $P_{a_i}=a_i$ 的排列数，而剩下 $n-k$ 个数的位置任意，因此排列数
-
-$$
-\left|\bigcap_{i=1}^{k}S_{a_i}\right|=(n-k)!
-$$
-
-那么选择 $k$ 个元素的方案数为 $C_n^k$，因此有
-
-$$
-\begin{split}
-\left|\bigcup_{i=1}^n\overline{S_i}\right|
-&=\sum_{k=1}^n(-1)^{k-1}\sum_{a_{1,\cdots,k} }\left|\bigcap_{i=1}^{k}S_{a_i}\right|\\
-&=\sum_{k=1}^n(-1)^{k-1}C_n^k(n-k)!\\
-&=\sum_{k=1}^n(-1)^{k-1}\frac{n!}{k!}\\
-&=n!\sum_{k=1}^n\frac{(-1)^{k-1} }{k!}
-\end{split}
-$$
-
-因此 $n$ 的错位排列数为
-
-$$
-D_n=n!-n!\sum_{k=1}^n\frac{(-1)^{k-1} }{k!}=n!\sum_{k=0}^n\frac{(-1)^k}{k!}
-$$
 
 ## 完全图子图染色问题
 
 前面的三道题都是容斥原理的正向运用，这道题则需要用到容斥原理逆向分析。
 
-???+note "完全图子图染色问题"
+???+ note "完全图子图染色问题"
     A 和 B 喜欢对图（不一定连通）进行染色，而他们的规则是，相邻的结点必须染同一种颜色。今天 A 和 B 玩游戏，对于 $n$ 阶 **完全图**  $G=(V,E)$。他们定义一个估价函数 $F(S)$，其中 S 是边集，$S\subseteq E$.$F(S)$ 的值是对图 $G'=(V,S)$ 用 $m$ 种颜色染色的总方案数。他们的另一个规则是，如果 $|S|$ 是奇数，那么 A 的得分增加 $F(S)$，否则 B 的得分增加 $F(S)$. 问 A 和 B 的得分差值。
 
 ### 数学形式
@@ -209,7 +148,7 @@ $$
 
 而属性 $x_i=x_j$ 对应的 **集合** 定义为 $Q_{i,j}$，其含义是所有满足该属性的图 $G'$ 的染色方案，集合的大小就是满足该属性的染色方案数，集合内的元素相当于所有满足该属性的图 $G'$ 的染色图。
 
-回到题目，“相邻的结点必须染同一种颜色”，可以理解为若干个 $Q$ 集合的交集。因此可以写出
+回到题目，「相邻的结点必须染同一种颜色」，可以理解为若干个 $Q$ 集合的交集。因此可以写出
 
 $$
 F(S)=\left|\bigcap_{(i,j)\in S}Q_{i,j}\right|
@@ -219,12 +158,12 @@ $$
 
 是不是很有容斥的味道了？由于容斥原理本身没有二元组的形式，因此我们把 **所有** 的边 $(i,j)$ 映射到 $T=\frac{n(n+1)}{2}$ 个整数上，假设将 $(i,j)$ 映射为 $k,1\leq k\leq T$，同时 $Q_{i,j}$ 映射为 $Q_k$. 那么属性 $x_i=x_j$ 则定义为 $P_k$.
 
-同时 S 可以表示为若干个 k 组成的集合，即 $S\Leftrightarrow K=\{k_1,k_2,\cdots,k_m\}$.（也就是说我们在边集与数集间建立了等价关系）。
+同时 S 可以表示为若干个 k 组成的集合，即 $S\iff K=\{k_1,k_2,\cdots,k_m\}$.（也就是说我们在边集与数集间建立了等价关系）。
 
 而 E 对应集合 $M=\left\{1,2,\cdots,\frac{n(n+1)}{2}\right\}$. 于是乎
 
 $$
-F(S)\Leftrightarrow F(\{ {k_i}\})=\left|\bigcap_{k_i}Q_{k_i}\right|
+F(S)\iff F(\{ {k_i}\})=\left|\bigcap_{k_i}Q_{k_i}\right|
 $$
 
 ### 逆向分析
@@ -232,10 +171,10 @@ $$
 那么要求的式子展开
 
 $$
-\begin{split}
+\begin{aligned}
 Ans &= \sum_{K\subseteq M}(-1)^{|K|-1}\left|\bigcap_{k_i\in K}Q_{k_i}\right|\\
     &= \sum_{i}|Q_i|-\sum_{i<j}|Q_i\cap Q_j|+\sum_{i<j<k}|Q_i\cap Q_j\cap Q_k|-\cdots+(-1)^{T-1}\left|\bigcap_{i=1}^TQ_i\right|
-\end{split}
+\end{aligned}
 $$
 
 于是就出现了容斥原理的展开形式，因此对这个式子逆向推导
@@ -260,7 +199,7 @@ $$
 
 考虑下面的问题：
 
-???+note "求最大公约数为 $k$ 的数对个数"
+???+ note " 求最大公约数为 $k$ 的数对个数 "
     设 $1 \le x, y \le N$，$f(k)$ 表示最大公约数为 $k$ 的有序数对 $(x, y)$ 的个数，求 $f(1)$ 到 $f(N)$ 的值。
 
 这道题固然可以用欧拉函数或莫比乌斯反演的方法来做，但是都不如用容斥原理来的简单。
@@ -286,15 +225,15 @@ for (long long k = N; k >= 1; k--) {
 
 附赠三倍经验供大家练手。
 
-- [Luogu P2398 GCD SUM](https://www.luogu.com.cn/problem/P2398)
-- [Luogu P2158\[SDOI2008\]仪仗队](https://www.luogu.com.cn/problem/P2158)
-- [Luogu P1447\[NOI2010\]能量采集](https://www.luogu.com.cn/problem/P1447)
+-   [Luogu P2398 GCD SUM](https://www.luogu.com.cn/problem/P2398)
+-   [Luogu P2158\[SDOI2008\] 仪仗队](https://www.luogu.com.cn/problem/P2158)
+-   [Luogu P1447\[NOI2010\] 能量采集](https://www.luogu.com.cn/problem/P1447)
 
 ### 容斥原理推导欧拉函数
 
 考虑下面的问题：
 
-???+note "欧拉函数公式"
+???+ note "欧拉函数公式"
     求欧拉函数 $\varphi(n)$。其中 $\varphi(n)=|\{1\leq x\leq n|\gcd(x,n)=1\}|$。
 
 直接计算是 $O(n\log n)$ 的，用线性筛是 $O(n)$ 的，杜教筛是 $O(n^{\frac{2}{3}})$ 的（话说一道数论入门题用容斥做为什么还要扯到杜教筛上），接下来考虑用容斥推出欧拉函数的公式
@@ -320,11 +259,11 @@ $$
 因此可得
 
 $$
-\begin{split}
-\varphi(n)=&n-\sum_{i}\frac{n}{p_i}+\sum_{i<j}\frac{n}{p_ip_j}-\cdots+(-1)^k\frac{n}{p_1p_2\cdots p_n}\\
-=&n\left(1-\frac{1}{p_1}\right)\left(1-\frac{1}{p_2}\right)\cdots\left(1-\frac{1}{p_k}\right)\\
-=&n\prod_{i=1}^k\left(1-\frac{1}{p_i}\right)
-\end{split}
+\begin{aligned}
+\varphi(n)&=n-\sum_{i}\frac{n}{p_i}+\sum_{i<j}\frac{n}{p_ip_j}-\cdots+(-1)^k\frac{n}{p_1p_2\cdots p_n}\\
+&=n\left(1-\frac{1}{p_1}\right)\left(1-\frac{1}{p_2}\right)\cdots\left(1-\frac{1}{p_k}\right)\\
+&=n\prod_{i=1}^k\left(1-\frac{1}{p_i}\right)
+\end{aligned}
 $$
 
 这就是欧拉函数的数学表示啦
@@ -348,27 +287,27 @@ $$
 接下来我们简单证明一下。我们从等式的右边开始推：
 
 $$
-\begin{split}
+\begin{aligned}
 &\sum_{T\subseteq S}(-1)^{|S|-|T|}f(T)\\
 =&\sum_{T\subseteq S}(-1)^{|S|-|T|}\sum_{Q\subseteq T}g(Q)\\
 =&\sum_{Q}g(Q)\sum_{Q\subseteq T\subseteq S}(-1)^{|S|-|T|}\\
-\end{split}
+\end{aligned}
 $$
 
 我们发现后半部分的求和与 $Q$ 无关，因此把后半部分的 $Q$ 剔除：
 
 $$
-=\sum_{Q}g(Q)\sum_{T\subseteq (S\setminus Q)}(-1)^{|S\setminus Q|-|T|}\\
+=\sum_{Q}g(Q)\sum_{T\subseteq (S\setminus Q)}(-1)^{|S\setminus Q|-|T|}
 $$
 
 记关于集合 $P$ 的函数 $F(P)=\sum_{T\subseteq P}(-1)^{|P|-|T|}$，并化简这个函数：
 
 $$
-\begin{split}
-F(P)=&\sum_{T\subseteq P}(-1)^{|P|-|T|}\\
-=&\sum_{i=0}^{|P|}C_{|P|}^i(-1)^{|P|-i}=\sum_{i=0}^{|P|}C_{|P|}^i1^i(-1)^{|P|-i}\\
-=&(1-1)^{|P|}=0^{|P|}
-\end{split}
+\begin{aligned}
+F(P)&=\sum_{T\subseteq P}(-1)^{|P|-|T|}\\
+&=\sum_{i=0}^{|P|}\dbinom{|P|}{i}(-1)^{|P|-i}=\sum_{i=0}^{|P|}\dbinom{|P|}{i}1^i(-1)^{|P|-i}\\
+&=(1-1)^{|P|}=0^{|P|}
+\end{aligned}
 $$
 
 因此原来的式子的值是
@@ -403,7 +342,7 @@ $$
 
 ## DAG 计数
 
-???+note "DAG 计数"
+???+ note "DAG 计数"
     对 $n$ 个点带标号的有向无环图进行计数，对 $10^9+7$ 取模。$n\leq 5\times 10^3$。
 
 ### 直接 DP
@@ -411,7 +350,7 @@ $$
 考虑 DP，定义 $f[i,j]$ 表示 $i$ 个点的 DAG，有 $j$ 点个入度为 $0$ 的图的个数。假设去掉这 $j$ 个点后，有 $k$ 个点入度为 $0$，那么在去掉前这 $k$ 个点至少与这 $j$ 个点中的某几个有连边，即 $2^j-1$ 种情况；而这 $j$ 个点除了与 $k$ 个点连边，还可以与剩下的点任意连边，有 $2^{i-j-k}$ 种情况。因此方程如下：
 
 $$
-f[i,j]=\binom{i}{j}\sum_{k=1}^{i-j}(2^j-1)^k2^{i-j-k}f[i-j,k]
+f[i,j]=\binom{i}{j}\sum_{k=1}^{i-j}(2^j-1)^k2^{(i-j-k)j}f[i-j,k]
 $$
 
 计算上式的复杂度是 $O(n^3)$ 的。
@@ -428,7 +367,7 @@ $$
 
 ## Min-max 容斥
 
-对于满足全序关系并且其中元素满足可加减性的序列 $\{x_i\}$，设其长度为 $n$，并设 $S=\{1,2,3,\cdots,n\}$，则有：
+对于满足 [全序](../order-theory.md#偏序集) 关系并且其中元素满足可加减性的序列 $\{x_i\}$，设其长度为 $n$，并设 $S=\{1,2,3,\cdots,n\}$，则有：
 
 $$
 \max_{i\in S}{x_i}=\sum_{T\subseteq S}{(-1)^{|T|-1}\min_{j\in T}{x_j}}
@@ -437,13 +376,6 @@ $$
 $$
 \min_{i\in S}{x_i}=\sum_{T\subseteq S}{(-1)^{|T|-1}\max_{j\in T}{x_j}}
 $$
-
-??? note "全序关系"
-    对于集合 $X$，若 $X$ 满足全序关系，则下列陈述对于任意 $a,b,c\in X$ 都成立：
-    
-    - 反对称性：若 $a\le b$ 且 $b\le a$，则 $a=b$;
-    - 传递性：若 $a\le b$ 且 $b\le c$，则 $a\le c$；
-    - 完全性：$a\le b$ 或者 $b\le a$。
 
 **证明：** 考虑做一个到一般容斥原理的映射。对于 $x\in S$，假设 $x$ 是第 $k$ 大的元素。那么我们定义一个映射 $f:x\mapsto \{1,2,\cdots,k\}$。显然这是一个双射。
 
@@ -574,7 +506,7 @@ $$
 
 ## PKUWC2018 随机游走
 
-???+note "[PKUWC2018 随机游走](https://loj.ac/problem/2542)"
+???+ note "[PKUWC2018 随机游走](https://loj.ac/problem/2542)"
     给定一棵 $n$ 个点的树，你从 $x$ 出发，每次等概率随机选择一条与所在点相邻的边走过去。
     
     有 $Q$ 次询问。每次询问给出一个集合 $S$，求如果从 $x$ 出发一直随机游走，直到点集 $S$ 中的点都至少经过一次的话，期望游走几步。
@@ -603,8 +535,8 @@ $$
 
 考虑 $E(\min_{i\in T}x_i)$ 的含义，是第一次走到 $T$ 中某一个点的期望时间。不妨设 $f(i)$ 表示从结点 $i$ 出发，第一次走到 $T$ 中某个结点的期望时间。
 
-- 对于 $i\in T$，有 $f(i)=0$。
-- 对于 $i\notin T$，有 $f(i)=1+\frac{1}{\text{deg}(i)}\sum_{(i,j)\in E}f(j)$。
+-   对于 $i\in T$，有 $f(i)=0$。
+-   对于 $i\notin T$，有 $f(i)=1+\frac{1}{\text{deg}(i)}\sum_{(i,j)\in E}f(j)$。
 
 如果直接高斯消元，复杂度 $O(n^3)$。那么我们对每个 $T$ 都计算 $F(T)$ 的总复杂度就是 $O(2^nn^3)$，不能接受。我们使用树上消元的技巧。
 
@@ -636,6 +568,11 @@ $$
 回到容斥的部分，我们知道 $E(\max_{i\in S}x_i)=\sum_{T\subseteq S}(-1)^{|T|-1}F(T)$。
 
 不妨设 $F'(T)=(-1)^{|T|-1}F(T)$，那么进一步得到 $E(\max_{i\in S}x_i)=\sum_{T\subseteq S}F'(T)$。因此可以使用 FMT（也叫子集前缀和，或者 FWT 或变换）在 $O(2^nn)$ 的时间内对每个 $S$ 计算出 $E(\max_{i\in S}x_i)$，这样就可以 $O(1)$ 回答询问了。
+
+### 习题
+
+-   [ABC331- G - Collect Them All](https://atcoder.jp/contests/abc331/tasks/abc331_g)
+-   [洛谷 P4707 重返现世](https://www.luogu.com.cn/problem/P4707)
 
 ## 参考文献
 

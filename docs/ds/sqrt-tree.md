@@ -1,16 +1,18 @@
-给你一个长度为 n 的序列 $\left\langle a_i\right\rangle_{i=1}^n$，再给你一个满足结合律的运算 $\circ$（比如 $\gcd,\min,\max,+,\operatorname{and},\operatorname{or},\operatorname{xor}$ 均满足结合律），然后对于每一次区间询问 $[l,r]$，我们需要计算 $a_l\circ a_{l+1}\circ\dotsb\circ a_{r}$。
+## 引入
+
+给你一个长度为 n 的序列 ${\left\langle a_i\right\rangle}_{i=1}^n$，再给你一个满足结合律的运算 $\circ$（比如 $\gcd,\min,\max,+,\operatorname{and},\operatorname{or},\operatorname{xor}$ 均满足结合律），然后对于每一次区间询问 $[l,r]$，我们需要计算 $a_l\circ a_{l+1}\circ\dotsb\circ a_{r}$。
 
 Sqrt Tree 可以在 $O(n\log\log n)$ 的时间内预处理，并在 $O(1)$ 的时间内回答询问。
 
-## 描述
+## 解释
 
 ### 序列分块
 
 首先我们把整个序列分成 $O(\sqrt{n})$ 个块，每一块的大小为 $O(\sqrt{n})$。对于每个块，我们计算：
 
-1. $P_i$ 块内的前缀区间询问
-2. $S_i$ 块内的后缀区间询问
-3. 维护一个额外的数组 $\left\langle B_{i,j}\right\rangle$ 表示第 $i$ 个块到第 $j$ 个块的区间答案。
+1.  $P_i$ 块内的前缀区间询问
+2.  $S_i$ 块内的后缀区间询问
+3.  维护一个额外的数组 $\left\langle B_{i,j}\right\rangle$ 表示第 $i$ 个块到第 $j$ 个块的区间答案。
 
 举个例子，假设 $\circ$ 代表加法运算 $+$，序列为 $\{1,2,3,4,5,6,7,8,9\}$。
 
@@ -19,11 +21,11 @@ Sqrt Tree 可以在 $O(n\log\log n)$ 的时间内预处理，并在 $O(1)$ 的�
 那么每一块的前缀区间答案和后缀区间答案分别为
 
 $$
-\begin{split}
+\begin{aligned}
 &P_1=\{1,3,6\},S_1=\{6,5,3\}\\
 &P_2=\{4,9,15\},S_2=\{15,11,6\}\\
 &P_3=\{7,15,24\},S_3=\{24,17,9\}\\
-\end{split}
+\end{aligned}
 $$
 
 $B$ 数组为：
@@ -44,6 +46,27 @@ $$
 
 容易想到我们在每个块内递归地构造上述结构以支持块内的查询。对于大小为 $1$ 的块我们可以 $O(1)$ 地回答询问。这样我们就建出了一棵树，每一个结点代表序列的一个区间。叶子结点的区间长度为 $1$ 或 $2$。一个大小为 $k$ 的结点有 $O(\sqrt{k})$ 个子节点，于是整棵树的高度是 $O(\log\log n)$ 的，每一层的区间总长是 $O(n)$ 的，因此我们构建这棵树的复杂度是 $O(n\log\log n)$ 的。
 
+??? note "树高度的证明"
+    根据定义，设「控制」$n$ 个元素的结点的子树高度为 $T(n)$，可以写出递归式：
+    
+    $$
+    T(n)=T(\sqrt n)+1
+    $$
+
+    作换元 $n=2^m$ 得
+
+    $$
+    T(2^m)=T(2^{\frac m2})+1
+    $$
+
+    再定义 $S(m)=T(2^m)$，代入有
+
+    $$
+    S(m)=S(\dfrac m2)+1
+    $$
+
+    根据主定理，可知 $S(m)=O(\log m)$，因此 $T(n)=S(\log n)=O(\log\log n)$.
+
 现在我们可以在 $O(\log\log n)$ 的时间内回答询问。对于询问 $[l,r]$，我们只需要快速找到一个区间长度最小的结点 $u$ 使得 $u$ 能包含 $[l,r]$，这样 $[l,r]$ 在 $u$ 的分块区间中一定是跨块的，就可以 $O(1)$ 地计算答案了。查询一次的总体复杂度是 $O(\log\log n)$，因为树高是 $O(\log\log n)$ 的。不过我们仍可以优化这个过程。
 
 ### 优化询问复杂度
@@ -52,8 +75,8 @@ $$
 
 我们假设
 
-1. 每一块的大小都是 $2$ 的整数幂次；
-2. 每一层上的块大小是相同的。
+1.  每一块的大小都是 $2$ 的整数幂次；
+2.  每一层上的块大小是相同的。
 
 为此我们需要在序列的末位补充一些 $0$ 元素，使得它的长度变成 $2$ 的整数次幂。尽管有些块可能会变成原来的两倍大小，但这样仍是 $O(\sqrt{k})$ 的，于是预处理分块的复杂度仍是 $O(n)$ 的。
 
@@ -68,12 +91,12 @@ $$
 
 因此我们需要检查区间两个端点是否只有后 $k$ 位不同，即 $l\oplus r\le 2^k-1$。因此我们可以快速找到答案区间所在的层：
 
-1. 对于每个 $i\in [1,n]$，我们找到找到 $i$ 最高位上的 $1$；
-2. 现在对于一个询问 $[l,r]$，我们计算 $l\oplus r$ 的最高位，这样就可以快速确定答案区间所在的层。
+1.  对于每个 $i\in [1,n]$，我们找到 $i$ 最高位上的 $1$；
+2.  现在对于一个询问 $[l,r]$，我们计算 $l\oplus r$ 的最高位，这样就可以快速确定答案区间所在的层。
 
 这样我们就可以在 $O(1)$ 的时间内回答询问啦。
 
-## 更新元素
+## 更新元素的过程
 
 我们可以在 Sqrt Tree 上更新元素，单点修改和区间修改都是支持的。
 
@@ -93,9 +116,9 @@ $$
 
 因此我们可以这样更新 $index$ 树：
 
-1. 在 $O(\sqrt{n})$ 的时间内更新 $\left\langle P_i\right\rangle$ 和 $\left\langle S_i\right\rangle$。
-2. 更新 $index$，它的长度是 $O(n)$ 的，但我们只需要更新其中的一个元素（这个元素代表了被改变的块），这一步的时间复杂度是 $O(\sqrt{n})$ 的（使用朴素实现的算法）。
-3. 进入产生变化的子节点并使用朴素实现的算法在 $O(\sqrt{n})$ 的时间内更新信息。
+1.  在 $O(\sqrt{n})$ 的时间内更新 $\left\langle P_i\right\rangle$ 和 $\left\langle S_i\right\rangle$。
+2.  更新 $index$，它的长度是 $O(n)$ 的，但我们只需要更新其中的一个元素（这个元素代表了被改变的块），这一步的时间复杂度是 $O(\sqrt{n})$ 的（使用朴素实现的算法）。
+3.  进入产生变化的子节点并使用朴素实现的算法在 $O(\sqrt{n})$ 的时间内更新信息。
 
 注意，查询的复杂度仍是 $O(1)$ 的，因为我们最多使用 $index$ 树一次。于是单点修改的复杂度就是 $O(\sqrt{n})$ 的。
 
@@ -109,19 +132,19 @@ Sqrt Tree 也支持区间覆盖操作 $\operatorname{Update}(l,r,x)$，即把区
 
 在第一种实现中，我们只会给第 $1$ 层的结点（结点区间长度为 $O(\sqrt{n})$）打懒标记，在下传标记的时侯直接更新整个子树，复杂度为 $O(\sqrt{n}\log\log n)$。操作过程如下：
 
-1. 考虑第 $1$ 层上的结点，对于那些被修改区间完全包含的结点，给他们打一个懒标记；
+1.  考虑第 $1$ 层上的结点，对于那些被修改区间完全包含的结点，给他们打一个懒标记；
 
-2. 有两个块只有部分区间被覆盖，我们直接在 $O(\sqrt{n}\log\log n)$ 的时间内 **重建** 这两个块。如果它本身带有之前修改的懒标记，就在重建的时侯顺便下传标记；
+2.  有两个块只有部分区间被覆盖，我们直接在 $O(\sqrt{n}\log\log n)$ 的时间内 **重建** 这两个块。如果它本身带有之前修改的懒标记，就在重建的时侯顺便下传标记；
 
-3. 更新根结点的 $\left\langle P_i\right\rangle$ 和 $\left\langle S_i\right\rangle$，时间复杂度 $O(\sqrt{n})$；
+3.  更新根结点的 $\left\langle P_i\right\rangle$ 和 $\left\langle S_i\right\rangle$，时间复杂度 $O(\sqrt{n})$；
 
-4. 重建 $index$ 树，时间复杂度 $O(\sqrt{n}\log\log n)$。
+4.  重建 $index$ 树，时间复杂度 $O(\sqrt{n}\log\log n)$。
 
 现在我们可以高效完成区间修改了。那么如何利用懒标记回答询问？操作如下：
 
-1. 如果我们的询问被包含在一个有懒标记的块内，可以利用懒标记计算答案；
+1.  如果我们的询问被包含在一个有懒标记的块内，可以利用懒标记计算答案；
 
-2. 如果我们的询问包含多个块，那么我们只需要关心最左边和最右边不完整块的答案。中间的块的答案可以在 $index$ 树中查询（因为 $index$ 树在每次修改完后会重建），复杂度是 $O(1)$。
+2.  如果我们的询问包含多个块，那么我们只需要关心最左边和最右边不完整块的答案。中间的块的答案可以在 $index$ 树中查询（因为 $index$ 树在每次修改完后会重建），复杂度是 $O(1)$。
 
 因此询问的复杂度仍为 $O(1)$。
 
@@ -129,22 +152,22 @@ Sqrt Tree 也支持区间覆盖操作 $\operatorname{Update}(l,r,x)$，即把区
 
 在这种实现中，每一个结点都可以被打上懒标记。因此在处理一个询问的时侯，我们需要考虑祖先中的懒标记，那么查询的复杂度将变成 $O(\log\log n)$。不过更新信息的复杂度就会变得更快。操作如下：
 
-1. 被修改区间完全包含的块，我们把懒标记添加到这些块上，复杂度 $O(\sqrt{n})$；
-2. 被修改区间部分覆盖的块，更新 $\left\langle P_i\right\rangle$ 和 $\left\langle S_i\right\rangle$，复杂度 $O(\sqrt{n})$（因为只有两个被修改的块）；
-3. 更新 $index$ 树，复杂度 $O(\sqrt{n})$（使用同样的更新算法）；
-4. 对于没有索引的子树更新他们的 $\left\langle B_{i,j}\right\rangle$；
-5. 递归地更新两个没有被完全覆盖的区间。
+1.  被修改区间完全包含的块，我们把懒标记添加到这些块上，复杂度 $O(\sqrt{n})$；
+2.  被修改区间部分覆盖的块，更新 $\left\langle P_i\right\rangle$ 和 $\left\langle S_i\right\rangle$，复杂度 $O(\sqrt{n})$（因为只有两个被修改的块）；
+3.  更新 $index$ 树，复杂度 $O(\sqrt{n})$（使用同样的更新算法）；
+4.  对于没有索引的子树更新他们的 $\left\langle B_{i,j}\right\rangle$；
+5.  递归地更新两个没有被完全覆盖的区间。
 
 时间复杂度是 $O(\sqrt{n}+\sqrt{\sqrt{n}}+\dotsb)=O(\sqrt{n})$。
 
-## 代码实现
+## 实现
 
 下面的实现在 $O(n\log\log n)$ 的时间内建树，在 $O(1)$ 的时间内回答询问，在 $O(\sqrt{n})$ 的时间内单点修改。
 
 ```cpp
 SqrtTreeItem op(const SqrtTreeItem &a, const SqrtTreeItem &b);
 
-inline int log2Up(int n) {
+int log2Up(int n) {
   int res = 0;
   while ((1 << res) < n) {
     res++;
@@ -157,9 +180,9 @@ class SqrtTree {
   int n, lg, indexSz;
   vector<SqrtTreeItem> v;
   vector<int> clz, layers, onLayer;
-  vector<vector<SqrtTreeItem> > pref, suf, between;
+  vector<vector<SqrtTreeItem>> pref, suf, between;
 
-  inline void buildBlock(int layer, int l, int r) {
+  void buildBlock(int layer, int l, int r) {
     pref[layer][l] = v[l];
     for (int i = l + 1; i < r; i++) {
       pref[layer][i] = op(pref[layer][i - 1], v[i]);
@@ -170,7 +193,7 @@ class SqrtTree {
     }
   }
 
-  inline void buildBetween(int layer, int lBound, int rBound, int betweenOffs) {
+  void buildBetween(int layer, int lBound, int rBound, int betweenOffs) {
     int bSzLog = (layers[layer] + 1) >> 1;
     int bCntLog = layers[layer] >> 1;
     int bSz = 1 << bSzLog;
@@ -185,7 +208,7 @@ class SqrtTree {
     }
   }
 
-  inline void buildBetweenZero() {
+  void buildBetweenZero() {
     int bSzLog = (lg + 1) >> 1;
     for (int i = 0; i < indexSz; i++) {
       v[n + i] = suf[0][i << bSzLog];
@@ -193,7 +216,7 @@ class SqrtTree {
     build(1, n, n + indexSz, (1 << lg) - n);
   }
 
-  inline void updateBetweenZero(int bid) {
+  void updateBetweenZero(int bid) {
     int bSzLog = (lg + 1) >> 1;
     v[n + bid] = suf[0][bid << bSzLog];
     update(1, n, n + indexSz, (1 << lg) - n, n + bid);
@@ -234,7 +257,7 @@ class SqrtTree {
     update(layer + 1, l, r, betweenOffs, x);
   }
 
-  inline SqrtTreeItem query(int l, int r, int betweenOffs, int base) {
+  SqrtTreeItem query(int l, int r, int betweenOffs, int base) {
     if (l == r) {
       return v[l];
     }
@@ -260,9 +283,9 @@ class SqrtTree {
   }
 
  public:
-  inline SqrtTreeItem query(int l, int r) { return query(l, r, 0, 0); }
+  SqrtTreeItem query(int l, int r) { return query(l, r, 0, 0); }
 
-  inline void update(int x, const SqrtTreeItem &item) {
+  void update(int x, const SqrtTreeItem &item) {
     v[x] = item;
     update(0, 0, n, 0, x);
   }
@@ -299,4 +322,4 @@ class SqrtTree {
 
 [CodeChef - SEGPROD](https://www.codechef.com/NOV17/problems/SEGPROD)
 
-**本页面主要译自 [Sqrt Tree](https://cp-algorithms.com/data_structures/sqrt-tree.html)，版权协议为 CC-BY-SA 4.0。**
+**本页面主要译自 [Sqrt Tree - Algorithms for Competitive Programming](https://cp-algorithms.com/data_structures/sqrt-tree.html)，版权协议为 CC-BY-SA 4.0。**

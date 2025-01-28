@@ -1,12 +1,14 @@
 ## 前缀和
 
-前缀和是一种重要的预处理，能大大降低查询的时间复杂度。可以简单理解为“数列的前 $n$ 项的和”。[^note1]
+### 定义
+
+前缀和可以简单理解为「数列的前 $n$ 项的和」，是一种重要的预处理方式，能大大降低查询的时间复杂度。[^note1]
 
 C++ 标准库中实现了前缀和函数 [`std::partial_sum`](https://zh.cppreference.com/w/cpp/algorithm/partial_sum)，定义于头文件 `<numeric>` 中。
 
 ### 例题
 
-!!! 例题
+??? 例题
     有 $N$ 个的正整数放到数组 $A$ 里，现在要求一个新的数组 $B$，新数组的第 $i$ 个数 $B[i]$ 是原数组 $A$ 第 $0$ 到第 $i$ 个数的和。
     
     输入：
@@ -23,153 +25,147 @@ C++ 标准库中实现了前缀和函数 [`std::partial_sum`](https://zh.cpprefe
     ```
 
 ??? note "解题思路"
-    对于这道题，我们有两种做法：
-    
-    - 把对数组 A 的累加依次放入数组 B 中。
-    - 递推：`B[i] = B[i-1] + A[i]`，前提 `B[0] = A[0]`。
+    递推：`B[0] = A[0]`，对于 $i \ge 1$ 则 `B[i] = B[i-1] + A[i]`。
 
 ??? note "参考代码"
-    ```cpp
-    #include <iostream>
-    using namespace std;
+    === "C++"
+        ```cpp
+        --8<-- "docs/basic/code/prefix-sum/prefix-sum_1.cpp"
+        ```
     
-    int N, A[10000], B[10000];
-    int main() {
-      cin >> N;
-      for (int i = 0; i < N; i++) {
-        cin >> A[i];
-      }
-    
-      // 前缀和数组的第一项和原数组的第一项是相等的。
-      B[0] = A[0];
-    
-      for (int i = 1; i < N; i++) {
-        // 前缀和数组的第 i 项 = 原数组的 0 到 i-1 项的和 + 原数组的第 i 项。
-        B[i] = B[i - 1] + A[i];
-      }
-    
-      for (int i = 0; i < N; i++) {
-        cout << B[i] << " ";
-      }
-    
-      return 0;
-    }
-    ```
+    === "Python"
+        ```python
+        --8<-- "docs/basic/code/prefix-sum/prefix-sum_1.py"
+        ```
 
 ### 二维/多维前缀和
 
-多维前缀和的普通求解方法几乎都是基于容斥原理。
+常见的多维前缀和的求解方法有两种。
 
-???+note "示例：一维前缀和扩展到二维前缀和"
-    比如我们有这样一个矩阵 $a$，可以视为二维数组：
-    
-    ```text
-    1 2 4 3
-    5 1 2 4
-    6 3 5 9
-    ```
-    
-    我们定义一个矩阵 $sum$，$sum_{x,y} = \sum\limits_{i=1}^x \sum\limits_{j=1}^y a_{i,j}$，  
-    那么这个矩阵长这样：
-    
-    ```text
-    1  3  7  10
-    6  9  15 22
-    12 18 29 45
-    ```
-    
-    第一个问题就是递推求 $sum$ 的过程，$sum_{i,j} = sum_{i - 1,j} + sum_{i,j - 1} - sum_{i - 1,j - 1} + a_{i,j}$。
-    
-    因为加了 $sum_{i - 1,j}$ 和 $sum_{i,j - 1}$ 重复了 $sum_{i - 1,j - 1}$，所以减去。
-    
-    第二个问题就是如何应用，譬如求 $(x1,y1) - (x2,y2)$ 子矩阵的和。
-    
-    那么，根据类似的思考过程，易得答案为 $sum_{x2,y2} - sum_{x1 - 1,y2} - sum_{x2,y1 - 1} + sum_{x1 - 1,y1 - 1}$。
+#### 基于容斥原理
 
-#### 例题
+这种方法多用于二维前缀和的情形。给定大小为 $m\times n$ 的二维数组 $A$，要求出其前缀和 $S$。那么，$S$ 同样是大小为 $m\times n$ 的二维数组，且
 
-???+note "[洛谷 P1387 最大正方形](https://www.luogu.com.cn/problem/P1387)"
-    在一个 n\*m 的只包含 0 和 1 的矩阵里找出一个不包含 0 的最大正方形，输出边长。
+$$
+S_{i,j} = \sum_{i'\le i}\sum_{j'\le j}A_{i',j'}.
+$$
+
+类比一维的情形，$S_{i,j}$ 应该可以基于 $S_{i-1,j}$ 或 $S_{i,j-1}$ 计算，从而避免重复计算前面若干项的和。但是，如果直接将 $S_{i-1,j}$ 和 $S_{i,j-1}$ 相加，再加上 $A_{i,j}$，会导致重复计算 $S_{i-1,j-1}$ 这一重叠部分的前缀和，所以还需要再将这部分减掉。这就是 [容斥原理](../math/combinatorics/inclusion-exclusion-principle.md)。由此得到如下递推关系：
+
+$$
+S_{i,j} = A_{i,j} + S_{i-1,j} + S_{i,j-1} - S_{i-1,j-1}. 
+$$
+
+实现时，直接遍历 $(i,j)$ 求和即可。
+
+???+ note "示例"
+    考虑一个具体的例子。
+
+    ![二位前缀和示例](./images/prefix-sum-2d.svg)
+
+    这里，$S$ 是给定矩阵 $A$ 的前缀和。根据定义，$S_{3,3}$ 是左图中虚线方框中的子矩阵的和。这里，$S_{3,2}$ 是蓝色子矩阵的和，$S_{2,3}$ 是红色子矩阵的和，它们重叠部分的和是 $S_{2,2}$。由此可见，如果直接相加 $S_{3,2}$ 和 $S_{2,3}$，会重复计算 $S_{2,2}$，所以应该有 
+
+    $$
+    S_{3,3} = A_{3,3} + S_{2,3} + S_{3,2} - S_{2,2} = 5 + 18 + 15 - 9 = 29.
+    $$
+
+同样的道理，在已经预处理出二位前缀和后，要查询左上角为 $(i_1,j_1)$、右下角为 $(i_2,j_2)$ 的子矩阵的和，可以计算
+
+$$
+S_{i_2,j_2} - S_{i_1,j_2} - S_{i_2,j_1} + S_{i_1,j_1}.
+$$
+
+这可以在 $O(1)$ 时间内完成。
+
+在二维的情形，以上算法的时间复杂度可以简单认为是 $O(mn)$，即与给定数组的大小成线性关系。但是，当维度 $k$ 增大时，由于容斥原理涉及的项数以指数级的速度增长，时间复杂度会成为 $O(2^kN)$，这里 $k$ 是数组维度，而 $N$ 是给定数组大小。因此，该算法不再适用。
+
+???+ note "[洛谷 P1387 最大正方形](https://www.luogu.com.cn/problem/P1387)"
+    在一个 $n\times m$ 的只包含 $0$ 和 $1$ 的矩阵里找出一个不包含 $0$ 的最大正方形，输出边长。
 
 ??? note "参考代码"
+    === "C++"
+        ```cpp
+        --8<-- "docs/basic/code/prefix-sum/prefix-sum_2.cpp"
+        ```
+    
+    === "Python"
+        ```python
+        --8<-- "docs/basic/code/prefix-sum/prefix-sum_2.py"
+        ```
+
+#### 逐维前缀和
+
+对于一般的情形，给定 $k$ 维数组 $A$，大小为 $N$，同样要求得其前缀和 $S$。这里，
+
+$$
+S_{i_1,\cdots,i_k} = \sum_{i'_1\le i_1}\cdots\sum_{i'_k\le i_k} A_{i'_1,\cdots,i'_k}.
+$$
+
+从上式可以看出，$k$ 维前缀和就等于 $k$ 次求和。所以，一个显然的算法是，每次只考虑一个维度，固定所有其它维度，然后求若干个一维前缀和，这样对所有 $k$ 个维度分别求和之后，得到的就是 $k$ 维前缀和。
+
+??? note "三维前缀和的参考实现"
     ```cpp
-    #include <algorithm>
-    #include <iostream>
-    using namespace std;
-    int a[103][103];
-    int b[103][103];  // 前缀和数组，相当于上文的 sum[]
-    int main() {
-      int n, m;
-      cin >> n >> m;
-    
-      for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= m; j++) {
-          cin >> a[i][j];
-          b[i][j] =
-              b[i][j - 1] + b[i - 1][j] - b[i - 1][j - 1] + a[i][j];  // 求前缀和
-        }
-      }
-    
-      int ans = 1;
-    
-      int l = 2;
-      while (l <= min(n, m)) {
-        for (int i = l; i <= n; i++) {
-          for (int j = l; j <= m; j++) {
-            if (b[i][j] - b[i - l][j] - b[i][j - l] + b[i - l][j - l] == l * l) {
-              ans = max(ans, l);
-            }
-          }
-        }
-        l++;
-      }
-    
-      cout << ans << endl;
-      return 0;
-    }
+    --8<-- "docs/basic/code/prefix-sum/prefix-sum_4.cpp"
     ```
 
-### 基于 DP 计算高维前缀和
+因为考虑每一个维度的时候，都只遍历了整个数组一遍，这样的算法复杂度是 $O(kN)$ 的，通常可以接受。
 
-基于容斥原理来计算高维前缀和的方法，其优点在于形式较为简单，无需特别记忆，但当维数升高时，其复杂度较高。这里介绍一种基于 [DP](../dp/basic.md) 计算高维前缀和的方法。该方法即通常语境中所称的 **高维前缀和**。
+#### 特例：子集和 DP
 
-设高维空间 $U$ 共有 $D$ 维，需要对 $f[\cdot]$ 求高维前缀和 $\text{sum}[\cdot]$。令 $\text{sum}[i][\text{state}]$ 表示同 $\text{state}$ 后 $D - i$ 维相同的所有点对于 $\text{state}$ 点高维前缀和的贡献。由定义可知 $\text{sum}[0][\text{state}] = f[\text{state}]$，以及 $\text{sum}[\text{state}] = \text{sum}[D][\text{state}]$。
+维度比较大的情形，经常出现在一类叫做 **子集和 (SOS, Sum Over Subsets)** 的问题中。这是高维前缀和的特例。
 
-其递推关系为 $\text{sum}[i][\text{state}] = \text{sum}[i - 1][\text{state}] + \text{sum}[i][\text{state}']$，其中 $\text{state}'$ 为第 $i$ 维恰好比 $\text{state}$ 少 $1$ 的点。该方法的复杂度为 $O(D \times |U|)$，其中 $|U|$ 为高维空间 $U$ 的大小。
+问题描述如下。考虑大小为 $n$ 的集合的全体子集上面定义的函数 $f$，现在要求出其子集和函数 $g$，它满足
 
-一种实现的伪代码如下：
+$$
+g(S) = \sum_{T\subseteq S}f(T).
+$$
 
-    for state
-      sum[state] = f[state];
-    for(i = 0;i <= D;i += 1)
-      for 以字典序从小到大枚举 state
-        sum[state] += sum[state'];
+即 $g(S)$ 等于其所有子集 $T\subseteq S$ 上的函数值 $f(T)$ 的和。
+
+首先，子集和问题可以写成高维前缀和的形式。注意到，子集 $S$ 可以通过状态压缩的思想表示为长度为 $n$ 的 0-1 字符串 $s$。将字符串的每一位都看作是数组下标的一个维度，那么 $f$ 其实就是一个 $n$ 维数组，且每个维度下标都一定在 $\{0,1\}$ 之间。同时，子集的包含关系就等价于下标的大小关系，即
+
+$$
+T\subseteq S \iff \forall i(t_i \le s_i). 
+$$
+
+所以，对子集求和，就是求这个 $n$ 维数组的前缀和。
+
+现在，可以直接使用前文所述的逐维前缀和的方法求得子集和。时间复杂度是 $O(n2^n)$。
+
+??? note "参考实现"
+    ```cpp
+    --8<-- "docs/basic/code/prefix-sum/prefix-sum_5.cpp"
+    ```
+
+子集和的逆操作需要通过 [容斥原理](../math/combinatorics/inclusion-exclusion-principle.md) 进行。子集和问题也是快速莫比乌斯变换的必要步骤之一。
 
 ### 树上前缀和
 
-设 $sum_i$ 表示结点 $i$ 到根节点的权值总和。  
+设 $\textit{sum}_i$ 表示结点 $i$ 到根节点的权值总和。  
 然后：
 
-- 若是点权，$x,y$ 路径上的和为 $sum_x + sum_y - sum_{lca} - sum_{fa_{lca}}$。
--   若是边权，$x,y$ 路径上的和为 $sum_x + sum_y - 2sum_{lca}$。
+-   若是点权，$x,y$ 路径上的和为 $\textit{sum}_x + \textit{sum}_y - \textit{sum}_\textit{lca} - \textit{sum}_{\textit{fa}_\textit{lca}}$。
+-   若是边权，$x,y$ 路径上的和为 $\textit{sum}_x + \textit{sum}_y - 2\cdot\textit{sum}_{lca}$。
 
-    $lca$ 的求法参见 [最近公共祖先](../graph/lca.md)。
+    LCA 的求法参见 [最近公共祖先](../graph/lca.md)。
 
 ## 差分
+
+### 解释
 
 差分是一种和前缀和相对的策略，可以当做是求和的逆运算。
 
 这种策略的定义是令 $b_i=\begin{cases}a_i-a_{i-1}\,&i \in[2,n] \\ a_1\,&i=1\end{cases}$
 
-简单性质：
+### 性质
 
-- $a_i$ 的值是 $b_i$ 的前缀和，即 $a_n=\sum\limits_{i=1}^nb_i$
-- 计算 $a_i$ 的前缀和 $sum=\sum\limits_{i=1}^na_i=\sum\limits_{i=1}^n\sum\limits_{j=1}^{i}b_j=\sum\limits_{i}^n(n-i+1)b_i$
+-   $a_i$ 的值是 $b_i$ 的前缀和，即 $a_n=\sum\limits_{i=1}^nb_i$
+-   计算 $a_i$ 的前缀和 $sum=\sum\limits_{i=1}^na_i=\sum\limits_{i=1}^n\sum\limits_{j=1}^{i}b_j=\sum\limits_{i=1}^n(n-i+1)b_i$
 
 它可以维护多次对序列的一个区间加上一个数，并在最后询问某一位的数或是多次询问某一位的数。注意修改操作一定要在查询操作之前。
 
-???+note "示例"
-    譬如使 $[l,r]$ 中的每个数加上一个 $k$，就是
+???+ note "示例"
+    譬如使 $[l,r]$ 中的每个数加上一个 $k$，即
     
     $$
     b_l \leftarrow b_l + k,b_{r + 1} \leftarrow b_{r + 1} - k
@@ -189,24 +185,24 @@ C++ 标准库中实现了差分函数 [`std::adjacent_difference`](https://zh.cp
 
 #### 点差分
 
-举例：对域树上的一些路径 $\delta(s_1,t_1), \delta(s_2,t_2), \delta(s_3,t_3)\dots$ 进行访问，问一条路径 $\delta(s,t)$ 上的点被访问的次数。
+举例：对树上的一些路径 $\delta(s_1,t_1), \delta(s_2,t_2), \delta(s_3,t_3)\dots$ 进行访问，问一条路径 $\delta(s,t)$ 上的点被访问的次数。
 
 对于一次 $\delta(s,t)$ 的访问，需要找到 $s$ 与 $t$ 的公共祖先，然后对这条路径上的点进行访问（点的权值加一），若采用 DFS 算法对每个点进行访问，由于有太多的路径需要访问，时间上承受不了。这里进行差分操作：
 
 $$
 \begin{aligned}
 &d_s\leftarrow d_s+1\\
-&d_{lca}\leftarrow d_{lca}-1\\
+&d_{lca}\leftarrow d_{\textit{lca}}-1\\
 &d_t\leftarrow d_t+1\\
-&d_{f(lca)}\leftarrow d_{f(lca)}-1\\
+&d_{f(\textit{lca})}\leftarrow d_{f(\textit{lca})}-1\\
 \end{aligned}
 $$
 
-其中 $f$ 表示 $lca$ 的父亲节点，$d_i$ 为点权 $a_i$ 的差分数组。
+其中 $f(x)$ 表示 $x$ 的父亲节点，$d_i$ 为点权 $a_i$ 的差分数组。
 
 ![](./images/prefix_sum1.png)
 
-可以认为公式中的前两条是对蓝色方框内的路径进行操作，后两条是对红色方框内的路径进行操作。不妨将 $lca$ 左侧的直系子节点命名为 $left$。那么就有 $d_{lca}-1=a_{lca}-(a_{left}+1)$，$d_{f(lca)}-1=a_{f(lca)}-(a_{lca}+1)$。可以发现实际上点差分的操作和上文一维数组的差分操作是类似的。
+可以认为公式中的前两条是对蓝色方框内的路径进行操作，后两条是对红色方框内的路径进行操作。不妨令 $\textit{lca}$ 左侧的直系子节点为 $\textit{left}$。那么有 $d_{\textit{lca}}-1=a_{\textit{lca}}-(a_{\textit{left}}+1)$，$d_{f(\textit{lca})}-1=a_{f(\textit{lca})}-(a_{\textit{lca}}+1)$。可以发现实际上点差分的操作和上文一维数组的差分操作是类似的。
 
 #### 边差分
 
@@ -216,7 +212,7 @@ $$
 \begin{aligned}
 &d_s\leftarrow d_s+1\\
 &d_t\leftarrow d_t+1\\
-&d_{lca}\leftarrow d_{lca}-2\\
+&d_{\textit{lca}}\leftarrow d_{\textit{lca}}-2\\
 \end{aligned}
 $$
 
@@ -226,138 +222,65 @@ $$
 
 ### 例题
 
-???+note "[洛谷 3128 最大流](https://www.luogu.com.cn/problem/P3128)"
+???+ note "[洛谷 3128 最大流](https://www.luogu.com.cn/problem/P3128)"
     FJ 给他的牛棚的 $N(2 \le N \le 50,000)$ 个隔间之间安装了 $N-1$ 根管道，隔间编号从 $1$ 到 $N$。所有隔间都被管道连通了。
     
     FJ 有 $K(1 \le K \le 100,000)$ 条运输牛奶的路线，第 $i$ 条路线从隔间 $s_i$ 运输到隔间 $t_i$。一条运输路线会给它的两个端点处的隔间以及中间途径的所有隔间带来一个单位的运输压力，你需要计算压力最大的隔间的压力是多少。
 
 ??? note "解题思路"
-    需要统计每个点经过了多少次，那么就用树上差分将每一次的路径上的点加一，可以很快得到每个点经过的次数。这里采用倍增法进行 lca 的计算。最后对 DFS 遍历整棵树，在回溯时对差分数组求和就能求得答案了。
+    需要统计每个点经过了多少次，那么就用树上差分将每一次的路径上的点加一，可以很快得到每个点经过的次数。这里采用倍增法计算 LCA，最后对 DFS 遍历整棵树，在回溯时对差分数组求和就能求得答案了。
 
 ??? note "参考代码"
     ```cpp
-    #include <bits/stdc++.h>
-    
-    using namespace std;
-    #define maxn 50010
-    
-    struct node {
-      int to, next;
-    } edge[maxn << 1];
-    
-    int fa[maxn][30], head[maxn << 1];
-    int power[maxn];
-    int depth[maxn], lg[maxn];
-    int n, k, ans = 0, tot = 0;
-    
-    void add(int x, int y) {
-      edge[++tot].to = y;
-      edge[tot].next = head[x];
-      head[x] = tot;
-    }
-    
-    void dfs(int now, int father) {
-      fa[now][0] = father;
-      depth[now] = depth[father] + 1;
-      for (int i = 1; i <= lg[depth[now]]; ++i)
-        fa[now][i] = fa[fa[now][i - 1]][i - 1];
-      for (int i = head[now]; i; i = edge[i].next)
-        if (edge[i].to != father) dfs(edge[i].to, now);
-    }
-    
-    int lca(int x, int y) {
-      if (depth[x] < depth[y]) swap(x, y);
-      while (depth[x] > depth[y]) x = fa[x][lg[depth[x] - depth[y]] - 1];
-      if (x == y) return x;
-      for (int k = lg[depth[x]] - 1; k >= 0; k--) {
-        if (fa[x][k] != fa[y][k]) x = fa[x][k], y = fa[y][k];
-      }
-      return fa[x][0];
-    }
-    
-    //用dfs求最大压力，回溯时将子树的权值加上
-    void get_ans(int u, int father) {
-      for (int i = head[u]; i; i = edge[i].next) {
-        int to = edge[i].to;
-        if (to == father) continue;
-        get_ans(to, u);
-        power[u] += power[to];
-      }
-      ans = max(ans, power[u]);
-    }
-    
-    int main() {
-      scanf("%d %d", &n, &k);
-      int x, y;
-      for (int i = 1; i <= n; i++) {
-        lg[i] = lg[i - 1] + (1 << lg[i - 1] == i);
-      }
-      for (int i = 1; i <= n - 1; i++) {
-        scanf("%d %d", &x, &y);
-        add(x, y);
-        add(y, x);
-      }
-      dfs(1, 0);
-      int s, t;
-      for (int i = 1; i <= k; i++) {
-        scanf("%d %d", &s, &t);
-        int ancestor = lca(s, t);
-        // 树上差分
-        power[s]++;
-        power[t]++;
-        power[ancestor]--;
-        power[fa[ancestor][0]]--;
-      }
-      get_ans(1, 0);
-      printf("%d\n", ans);
-      return 0;
-    }
+    --8<-- "docs/basic/code/prefix-sum/prefix-sum_3.cpp"
     ```
 
 ## 习题
 
-* * *
-
 前缀和：
 
-- [洛谷 U53525 前缀和（例题）](https://www.luogu.com.cn/problem/U53525)
-- [洛谷 U69096 前缀和的逆](https://www.luogu.com.cn/problem/U69096)
-- [AT2412 最大の和](https://vjudge.net/problem/AtCoder-joi2007ho_a#author=wuyudi)
-- [「USACO16JAN」子共七 Subsequences Summing to Sevens](https://www.luogu.com.cn/problem/P3131)
+-   [洛谷 B3612【深进 1. 例 1】求区间和](https://www.luogu.com.cn/problem/B3612)
+-   [洛谷 U69096 前缀和的逆](https://www.luogu.com.cn/problem/U69096)
+-   [AtCoder joi2007ho\_a 最大の和](https://atcoder.jp/contests/joi2007ho/tasks/joi2007ho_a)
+-   [「USACO16JAN」子共七 Subsequences Summing to Sevens](https://www.luogu.com.cn/problem/P3131)
+-   [「USACO05JAN」Moo Volume S](https://www.luogu.com.cn/problem/P6067)
 
-* * *
+***
 
 二维/多维前缀和：
 
-- [HDU 6514 Monitor](http://acm.hdu.edu.cn/showproblem.php?pid=6514)
-- [洛谷 P1387 最大正方形](https://www.luogu.com.cn/problem/P1387)
-- [「HNOI2003」激光炸弹](https://www.luogu.com.cn/problem/P2280)
+-   [HDU 6514 Monitor](https://acm.hdu.edu.cn/showproblem.php?pid=6514)
+-   [洛谷 P1387 最大正方形](https://www.luogu.com.cn/problem/P1387)
+-   [「HNOI2003」激光炸弹](https://www.luogu.com.cn/problem/P2280)
+-   [CF 165E Compatible Numbers](https://codeforces.com/contest/165/problem/E)
+-   [CF 383E Vowels](https://codeforces.com/problemset/problem/383/E)
+-   [ARC 100C Or Plus Max](https://atcoder.jp/contests/arc100/tasks/arc100_c)
 
-* * *
+***
 
 树上前缀和：
 
-- [LOJ 10134.Dis](https://loj.ac/problem/10134)
-- [LOJ 2491. 求和](https://loj.ac/problem/2491)
+-   [LOJ 10134.Dis](https://loj.ac/problem/10134)
+-   [LOJ 2491. 求和](https://loj.ac/problem/2491)
 
-* * *
+***
 
 差分：
 
-- [树状数组 3：区间修改，区间查询](https://loj.ac/problem/132)
-- [P3397 地毯](https://www.luogu.com.cn/problem/P3397)
-- [「Poetize6」IncDec Sequence](https://www.luogu.com.cn/problem/P4552)
+-   [树状数组 3：区间修改，区间查询](https://loj.ac/problem/132)
+-   [P3397 地毯](https://www.luogu.com.cn/problem/P3397)
+-   [「Poetize6」IncDec Sequence](https://www.luogu.com.cn/problem/P4552)
 
-* * *
+***
 
 树上差分：
 
-- [洛谷 3128 最大流](https://www.luogu.com.cn/problem/P3128)
-- [JLOI2014 松鼠的新家](https://loj.ac/problem/2236)
-- [NOIP2015 运输计划](http://uoj.ac/problem/150)
-- [NOIP2016 天天爱跑步](http://uoj.ac/problem/261)
+-   [洛谷 3128 最大流](https://www.luogu.com.cn/problem/P3128)
+-   [JLOI2014 松鼠的新家](https://loj.ac/problem/2236)
+-   [NOIP2015 运输计划](http://uoj.ac/problem/150)
+-   [NOIP2016 天天爱跑步](http://uoj.ac/problem/261)
 
-* * *
+***
 
 ## 参考资料与注释
 

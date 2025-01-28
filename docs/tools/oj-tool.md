@@ -6,23 +6,23 @@ cf-tool 是 Codeforces 的命令行界面的跨平台（支持 Windows、Linux�
 
 源码托管在 [xalanq/cf-tool](https://github.com/xalanq/cf-tool) 上。
 
-![](./images/cf-tool1.jpg)
+![cf-tool 使用截图 1](./images/oj-tool-1.jpg)
 
-![](./images/cf-tool2.jpg)
+![cf-tool 使用截图 2](./images/oj-tool-2.jpg)
 
 ### 特点
 
-- 支持 Codeforces 中的所有编程语言。
-- 支持 Contests 和 Gym。
-- 提交代码。
-- 动态刷新提交后的情况。
-- 拉取问题的样例。
-- 本地编译和测试样例。
-- 拉取某人的所有代码。
-- 从指定模板生成代码（包括时间戳，作者等信息）。
-- 列出某场比赛的所有题目的整体信息。
-- 用默认的网页浏览器打开题目页面、榜单、提交页面等。
-- 丰富多彩的命令行。
+-   支持 Codeforces 中的所有编程语言。
+-   支持 Contests 和 Gym。
+-   提交代码。
+-   动态刷新提交后的情况。
+-   拉取问题的样例。
+-   本地编译和测试样例。
+-   拉取某人的所有代码。
+-   从指定模板生成代码（包括时间戳，作者等信息）。
+-   列出某场比赛的所有题目的整体信息。
+-   用默认的网页浏览器打开题目页面、榜单、提交页面等。
+-   丰富多彩的命令行。
 
 ### 下载
 
@@ -80,17 +80,17 @@ cf-tool 是 Codeforces 的命令行界面的跨平台（支持 Windows、Linux�
 
 2.  我无法使用 `cf` 这个命令
 
-    你应该将 `cf` 这个程序放到一个已经加入到系统变量 PATH 的路径里（比如说 Linux 里的 `/usr/bin/`)。
+    你应该将 `cf` 这个程序放到一个已经加入到系统变量 PATH 的路径里（比如说 Linux 里的 `/usr/bin/`）。
 
-    不明白的话请直接搜索“PATH 添加路径”。
+    不明白的话请直接搜索「PATH 添加路径」。
 
 3.  如何加一个新的测试数据
 
-    新建两个额外的测试数据文件 `inK.txt` 和 `ansK.txt`（K 是包含 0~9 的字符串）。
+    新建两个额外的测试数据文件 `inK.txt` 和 `ansK.txt`（K 是包含 0\~9 的字符串）。
 
 4.  怎样在终端里启用 tab 补全命令
 
-    使用这个工具 [Infinidat/infi.docopt_completion](https://github.com/Infinidat/infi.docopt_completion) 即可。
+    使用这个工具 [Infinidat/infi.docopt\_completion](https://github.com/Infinidat/infi.docopt_completion) 即可。
 
     注意：如果有一个新版本发布（尤其是添加了新命令），你应该重新运行 `docopt-completion cf`。
 
@@ -102,9 +102,9 @@ cf-tool 是 Codeforces 的命令行界面的跨平台（支持 Windows、Linux�
 
 这个网站有三个功能：
 
-- 用炫酷的图表来可视化某个用户的各种信息（比如通过题目的难度分布）。
-- 对比两个用户。
-- 计算一场比赛的 Rating 预测。
+-   用炫酷的图表来可视化某个用户的各种信息（比如通过题目的难度分布）。
+-   对比两个用户。
+-   计算一场比赛的 Rating 预测。
 
 ## Competitive Companion
 
@@ -114,19 +114,23 @@ cf-tool 是 Codeforces 的命令行界面的跨平台（支持 Windows、Linux�
 
 使用方法：
 
-- 在谷歌或者火狐浏览器上安装插件。该工具会将解析到的测例数据以 JSON 格式的形式发到指定的端口。
-- 在本地安装任何可以从端口监听读取数据的工具即可，可以参考 [官方给出的示例](https://github.com/jmerle/competitive-companion-example)。
+-   在谷歌或者火狐浏览器上安装插件。该工具会将解析到的测例数据以 JSON 格式的形式发到指定的端口。
+-   在本地安装任何可以从端口监听读取数据的工具即可，可以参考 [官方给出的示例](https://github.com/jmerle/competitive-companion-example)。
 
 图片演示：
 
-![演示](images/cf-tool3.gif)
+![Competitive Companion 使用演示](images/oj-tool-3.apng)
 
-## CP Editor
+使用 [zqxyz73](https://github.com/zqxyz73) 同学的 [bytetools](https://github.com/zqxyz73/bytetools) 完成演示。
 
-官网：[CP Editor](https://cpeditor.org/zh)
+## ac-predictor
 
-CP Editor 是一款专为算法竞赛（Competitive Programming）设计的轻量级 IDE，支持 Linux/Windows/macOS，是自由软件，有自动获取网页上的样例，一键编译运行并测试样例，在 IDE 内提交至 Codeforces 等功能。
+ac-predictor 是一个在 atcoder rating 更新前提前知道比赛 rating 变化的插件。
 
-源码托管在 [GitHub](https://github.com/cpeditor/cpeditor) 上，另有 [Gitee 镜像](https://gitee.com/ouuan/cpeditor)（同步自 GitHub）。
+这个工具是一个 tampermonkey 脚本，所以你需要首先安装 [tampermonkey](https://www.tampermonkey.net/)。
 
-下载链接：[GitHub Releases](https://github.com/cpeditor/cpeditor/releases) 或 [Gitee 发行版](https://gitee.com/ouuan/cpeditor/releases)。
+完成后来到 [greasyfork](https://greasyfork.org/zh-CN/scripts/369954-ac-predictor)，点击安装即可。
+
+安装完成后，比赛的排行榜界面会显示每个用户的 rating 变化预测。
+
+这个工具有一个经由 [GoodCoder666](https://github.com/GoodCoder666) 汉化的版本，点击 [这里](https://greasyfork.org/zh-CN/scripts/458528-ac-predictor-cn) 以安装。

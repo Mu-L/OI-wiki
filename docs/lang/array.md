@@ -86,13 +86,13 @@ arr[2][1] = 1;  // 访问二维数组
 例：从标准输入中读取两个数 $n$ 和 $m$，分别表示黑白图片的高与宽，满足 $n,m\leq 1000$。对于接下来的 $n$ 行数据，每行有用空格分隔开的 $m$ 个数，代表这一位置的亮度值。现在我们读取这张图片，并将其存入二维数组中。
 
 ```cpp
-const int maxn = 1001;
-int pic[maxn][maxn];
+const int MAXN = 1001;
+int pic[MAXN][MAXN];
 int n, m;
 
 cin >> n >> m;
 for (int i = 1; i <= n; ++i)
-  for (int j = 1; j <= n; ++j) cin >> pic[i][j];
+  for (int j = 1; j <= m; ++j) cin >> pic[i][j];
 ```
 
 同样地，你可以定义三维、四维，以及更高维的数组。

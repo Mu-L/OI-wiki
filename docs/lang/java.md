@@ -4,90 +4,7 @@ Java 是一种广泛使用的计算机编程语言，拥有 **跨平台**、**�
 
 ## 环境安装
 
-### Windows
-
-可以在 [Oracle 官网](https://www.oracle.com/java/technologies/javase-downloads.html) 下载 Oracle JDK（需要登录 Oracle 账号）。推荐下载 EXE 安装包来自动配置环境变量。
-
-如果需要使用 OpenJDK，可以使用 [AdoptOpenJDK](https://adoptopenjdk.net/) 提供的预编译包。如果下载较慢，可以使用 [清华大学 TUNA 镜像站](https://mirrors.tuna.tsinghua.edu.cn/AdoptOpenJDK/)。推荐下载 MSI 安装包来自动配置环境变量。
-
-### Linux
-
-#### 使用包管理器安装
-
-可以使用包管理器提供的 JDK。
-
-如果是 Debian 及其衍生发行版（包括 Ubuntu），命令如下：
-
-```bash
-sudo apt install default-jre
-sudo apt install default-jdk
-```
-
-如同时安装了多个版本，可通过 `update-java-alternatives -l` 查看目前使用的版本，通过 `update-java-alternatives -s <status 中显示的名字>` 更改使用的版本。
-
-如果 CentOS 7 及以前则使用的是 `yum` 安装，命令如下：
-
-```bash
-sudo yum install java-1.8.0-openjdk
-```
-
-在稍后询问是否安装时按下<kbd>y</kbd>继续安装，或是你已经下好了 `rpm` 文件，可以使用以下命令安装：
-
-```bash
-sudo yum localinstall jre-9.0.4_linux_x64_bin.rpm #安装jre-9.0
-sudo yum localinstall jdk-9.0.4_linux-x64_bin.rpm #安装jdk-9.0
-```
-
-如果 CentOS 8 则使用的是 `dnf` 安装，命令如下：
-
-```bash
-sudo dnf install java-1.8.0-openjdk
-```
-
-在稍后询问是否安装时按下<kbd>y</kbd>继续安装，或是你已经下好了 `rpm` 文件，可以使用以下命令安装：
-
-```bash
-sudo dnf install jre-9.0.4_linux_x64_bin.rpm #安装jre-9.0
-sudo dnf install jdk-9.0.4_linux-x64_bin.rpm #安装jdk-9.0
-```
-
-如果是 Arch 及其衍生发行版（如 Manjaro），命令如下：
-
-```bash
-sudo pacman -S jdk8-openjdk # 8可以替换为其他版本，不加则为最新版
-```
-
-如同时安装了多个版本，可通过 `archlinux-java status` 查看目前使用的版本，通过 `archlinux-java set <status 中显示的名字>` 更改使用的版本。
-
-#### 手动安装
-
-```bash
-sudo mv jdk-14 /opt
-```
-
-并在 `.bashrc` 文件末尾添加：
-
-```bash
-export JAVA_HOME="/opt/jdk-14"
-export PATH=$JAVA_HOME/bin:$PATH
-```
-
-在控制台中输入命令 `source ~/.bashrc` 即可重载。如果是使用的 zsh 或其他命令行，在 `~/.zshrc` 或对应的文件中添加上面的内容。
-
-### macOS
-
-如果是 macOS，你可以使用以下命令安装包：
-
-```bash
-cd ~/Downloads
-curl -v -j -k -L -H "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u121-b13/e9e7ea248e2c4826b92b3f075a80e441/jdk-8u121-macosx-x64.dmg > jdk-8u121-macosx-x64.dmg
-hdiutil attach jdk-8u121-macosx-x64.dmg
-sudo installer -pkg /Volumes/JDK\ 8\ Update\ 121/JDK\ 8\ Update\ 121.pkg -target /
-diskutil umount /Volumes/JDK\ 8\ Update\ 121
-rm jdk-8u121-macosx-x64.dmg
-```
-
-或者直接在官方网站下载 `pkg` 包或 `dmg` 包安装。
+参见 [JDK](../tools/compiler.md#jdk)。
 
 ## 基本语法
 
@@ -152,7 +69,7 @@ int[] ary = new int[10];
 
 ### 字符串
 
-- 字符串是 Java 一个内置的类。
+-   字符串是 Java 一个内置的类。
 
 ```java
 // 最为简单的构造一个字符串变量的方法如下
@@ -232,7 +149,7 @@ Java 的流程控制语句与 C++ 是基本相同的。
 
 #### 选择
 
-- if
+-   if
 
 ```java
 class Test {
@@ -244,7 +161,7 @@ class Test {
 }
 ```
 
-- if...else
+-   if...else
 
 ```java
 class Test {
@@ -258,7 +175,7 @@ class Test {
 }
 ```
 
-- if...else if...else
+-   if...else if...else
 
 ```java
 class Test {
@@ -274,7 +191,7 @@ class Test {
 }
 ```
 
-- switch...case
+-   switch...case
 
 ```java
 class Test {
@@ -295,7 +212,7 @@ class Test {
 
 #### 循环
 
-- for
+-   for
 
 `for` 关键字有两种使用方法，其中第一种是普通的 `for` 循环，形式如下：
 
@@ -321,7 +238,7 @@ class Test {
 }
 ```
 
-- while
+-   while
 
 ```java
 class Test {
@@ -333,7 +250,7 @@ class Test {
 }
 ```
 
-- do...while
+-   do...while
 
 ```java
 class Test {

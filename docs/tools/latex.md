@@ -6,7 +6,7 @@ LaTeX（读作/ˈlɑːtɛx/或/ˈleɪtɛx/）是一个让你的文档看起来�
 
 LaTeX 基于 TeX（Donald Knuth 在 1978 年为数字化排版设计的排版系统）。TeX 是一种电脑能够处理的低级语言，但大多数人发现它很难使用。LaTeX 正是为了让它变得更加易用而设计的。目前 LaTeX 的版本是 LaTeX 2e。
 
-如果你习惯于使用微软的 Office Word 处理文档，那么你会觉得 LaTeX 的工作方式让你很不习惯。Word 是典型的“所见即所得”的编辑器，你可以在编排文档的时侯查看到最终的排版效果。但使用 LaTeX 时你并不能方便地查看最终效果，这使得你专注于内容而不是外观的调整。
+如果你习惯于使用微软的 Office Word 处理文档，那么你会觉得 LaTeX 的工作方式让你很不习惯。Word 是典型的「所见即所得」的编辑器，你可以在编排文档的时侯查看到最终的排版效果。但使用 LaTeX 时你并不能方便地查看最终效果，这使得你专注于内容而不是外观的调整。
 
 一个 LaTeX 文档是一个以 `.tex` 结尾的文本文件，可以使用任意的文本编辑器编辑，比如 Notepad，但对于大多数人而言，使用一个合适的 LaTeX 编辑器会使得编辑的过程容易很多。在编辑的过程中你可以标记文档的结构。完成后你可以进行编译——这意味着将它转化为另一种格式的文档。它支持多种格式，但最常用的是 PDF 文档格式。
 
@@ -14,9 +14,9 @@ LaTeX 基于 TeX（Donald Knuth 在 1978 年为数字化排版设计的排版系
 
 下面列出在本文中使用到的记号：
 
-- 希望你实施的操作会被打上一个箭头 $\rightarrow$；
-- 你输入的字符会被装进代码块中；
-- 菜单命令与按钮的名称会被标记为 **粗体**。
+-   希望你实施的操作会被打上一个箭头 $\rightarrow$；
+-   你输入的字符会被装进代码块中；
+-   菜单命令与按钮的名称会被标记为 **粗体**。
 
 ### 一些概念
 
@@ -57,12 +57,10 @@ $\rightarrow$ 进入 **Format** 菜单，选择 **Syntax Coloring**，然后选�
 $\rightarrow$ 输入以下文字：
 
 ```tex
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper, 12pt]{article}
 
 \begin{document}
-
-A sentence of text.
-
+  A sentence of text.
 \end{document}
 ```
 
@@ -102,17 +100,15 @@ $\rightarrow$ 在 `\begin{document}` 和 命令后紧跟着输入以下文本：
 你的文档现在长成了这样：
 
 ```tex
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper, 12pt]{article}
 
 \begin{document}
+  \title{My First Document}
+  \author{My Name}
+  \date{\today}
+  \maketitle
 
-\title{My First Document}
-\author{My Name}
-\date{\today}
-\maketitle
-
-A sentence of text.
-
+  A sentence of text.
 \end{document}
 ```
 
@@ -120,18 +116,18 @@ $\rightarrow$ 点击 **Typeset** 按扭，核对生成的 PDF 文档。
 
 要点笔记：
 
-- `\today` 是插入当前时间的命令。你也可以输入一个不同的时间，比如 `\data{November 2013}`。
-- **article** 文档的正文会紧跟着标题之后在同一页上排版。**report** 会将标题置为单独的一页。
+-   `\today` 是插入当前时间的命令。你也可以输入一个不同的时间，比如 `\date{November 2013}`。
+-   **article** 文档的正文会紧跟着标题之后在同一页上排版。**report** 会将标题置为单独的一页。
 
 ### 章节
 
 如果需要的话，你可能想将你的文档分为章（Chatpers）、节（Sections）和小节（Subsections）。下列分节命令适用于 **article** 类型的文档：
 
-- `\section{...}`
-- `\subsection{...}`
-- `\subsubsection{...}`
-- `\paragraph{...}`
-- `\subparagraph{...}`
+-   `\section{...}`
+-   `\subsection{...}`
+-   `\subsubsection{...}`
+-   `\paragraph{...}`
+-   `\subparagraph{...}`
 
 花括号内的文本表示章节的标题。对于 **report** 和 **book** 类型的文档我们还支持 `\chapter{...}` 的命令。
 
@@ -156,29 +152,27 @@ Here are my results.
 你的文档会变成
 
 ```tex
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper, 12pt]{article}
 
 \begin{document}
+  \title{My First Document}
+  \author{My Name}
+  \date{\today}
+  \maketitle
 
-\title{My First Document}
-\author{My Name}
-\date{\today}
-\maketitle
+  \section{Introduction}
+  This is the introduction.
 
-\section{Introduction}
-This is the introduction.
+  \section{Methods}
 
-\section{Methods}
+  \subsection{Stage 1}
+  The first part of the methods.
 
-\subsection{Stage 1}
-The first part of the methods.
+  \subsection{Stage 2}
+  The second part of the methods.
 
-\subsection{Stage 2}
-The second part of the methods.
-
-\section{Results}
-Here are my results.
-
+  \section{Results}
+  Here are my results.
 \end{document}
 ```
 
@@ -195,30 +189,27 @@ $\rightarrow$ 在 `\subsection{Stage 1}` 下面另起一行，输入 `\label{sec
 你的文档会变成这样：
 
 ```tex
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper, 12pt]{article}
 
 \begin{document}
+  \title{My First Document}
+  \author{My Name}
+  \date{\today}
+  \maketitle
 
-\title{My First Document}
-\author{My Name}
-\date{\today}
-\maketitle
+  \section{Introduction}
+  This is the introduction.
 
-\section{Introduction}
-This is the introduction.
+  \section{Methods}
 
-\section{Methods}
+  \subsection{Stage 1}
+  \label{sec1} The first part of the methods.
 
-\subsection{Stage 1}
-\label{sec1}
-The first part of the methods.
+  \subsection{Stage 2}
+  The second part of the methods.
 
-\subsection{Stage 2}
-The second part of the methods.
-
-\section{Results}
-Here are my results. Referring to section \ref{sec1} on page \pageref{sec1}
-
+  \section{Results}
+  Here are my results. Referring to section \ref{sec1} on page \pageref{sec1}
 \end{document}
 ```
 
@@ -244,7 +235,7 @@ $\rightarrow$ 在 `\maketitle` 之后输入以下内容：
 `\newpage` 命令会另起一个页面，这样我们就可以看到 `\pagenumbering` 命令带来的影响了。你的文档的前 14 行长这样：
 
 ```tex
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper, 12pt]{article}
 
 \begin{document}
 
@@ -286,14 +277,9 @@ $\rightarrow$ 编译并核对文档（可能需要多次编译，下文不赘述
 LaTeX 有多种不同的字体效果，在此列举一部分：
 
 ```tex
-\textit{words in italics}
-\textsl{words slanted}
-\textsc{words in smallcaps}
-\textbf{words in bold}
-\texttt{words in teletype}
-\textsf{sans serif words}
-\textrm{roman words}
-\underline{underlined words}
+\textit{words in italics} \textsl{words slanted} \textsc{words in smallcaps} \textbf{words
+in bold} \texttt{words in teletype} \textsf{sans serif words} \textrm{roman
+words} \underline{underlined words}
 ```
 
 效果如下：
@@ -333,15 +319,9 @@ $\rightarrow$ 在 `\begin{document}` 前输入 `\usepackage{color}`。$\rightarr
 接下来我们列举一些 LaTeX 的字体大小设定命令：
 
 ```tex
-normal size words
-{\tiny tiny words}
-{\scriptsize scriptsize words}
-{\footnotesize footnotesize words}
-{\small small words}
-{\large large words}
-{\Large Large words}
-{\LARGE LARGE words}
-{\huge huge words}
+normal size words {\tiny tiny words} {\scriptsize scriptsize words}
+{\footnotesize footnotesize words} {\small small words} {\large large words}
+{\Large Large words} {\LARGE LARGE words} {\huge huge words}
 ```
 
 效果如下：
@@ -362,13 +342,16 @@ $\rightarrow$ 输入下面的内容来生成一个有序列表套无序列表：
 
 ```tex
 \begin{enumerate}
-\item First thing
-\item Second thing
-\begin{itemize}
-\item A sub-thing
-\item Another sub-thing
-\end{itemize}
-\item Third thing
+  \item First thing
+
+  \item Second thing
+    \begin{itemize}
+      \item A sub-thing
+
+      \item Another sub-thing
+    \end{itemize}
+
+  \item Third thing
 \end{enumerate}
 ```
 
@@ -384,13 +367,16 @@ $\rightarrow$ 编译并核对 PDF 文档。
 
 ```tex
 \begin{itemize}
-\item[-] First thing
-\item[+] Second thing
-\begin{itemize}
-\item[Fish] A sub-thing
-\item[Plants] Another sub-thing
-\end{itemize}
-\item[Q] Third thing
+  \item[-] First thing
+
+  \item[+] Second thing
+    \begin{itemize}
+      \item[Fish] A sub-thing
+
+      \item[Plants] Another sub-thing
+    \end{itemize}
+
+  \item[Q] Third thing
 \end{itemize}
 ```
 
@@ -406,9 +392,8 @@ $\rightarrow$ 编译并核对 PDF 文档。
 
 ```tex
 It is a truth universally acknowledged% Note comic irony
-in the very first sentence
-, that a single man in possession of a good fortune, must
-be in want of a wife.
+in the very first sentence , that a single man in possession of a good fortune,
+must be in want of a wife.
 ```
 
 生成的结果为
@@ -445,7 +430,7 @@ $\rightarrow$ 输入代码来在你的文档中生成下面内容：
 
 ![p12](images/latex-for-beginners-12.png)
 
-询问专家或者查看本书的 TeX 源代码获取帮助。
+询问专家或者查看本页面的 [源代码](https://github.com/OI-wiki/OI-wiki/blob/master/docs/tools/latex.md?plain=1) 获取帮助。
 
 ## 表格
 
@@ -457,45 +442,44 @@ $\rightarrow$ 输入代码来在你的文档中生成下面内容：
 
 省略号会由定义表格的列的代码替换：
 
-- `l` 表示一个左对齐的列；
-- `r` 表示一个右对齐的列；
-- `c` 表示一个向中对齐的列；
-- `|` 表示一个列的竖线；
+-   `l` 表示一个左对齐的列；
+-   `r` 表示一个右对齐的列；
+-   `c` 表示一个向中对齐的列；
+-   `|` 表示一个列的竖线；
 
 例如，`{lll}` 会生成一个三列的表格，并且保存向左对齐，没有显式的竖线；`{|l|l|r|}` 会生成一个三列表格，前两列左对齐，最后一列右对齐，并且相邻两列之间有显式的竖线。
 
 表格的数据在 `\begin{tabular}` 后输入：
 
-- `&` 用于分割列；
-- `\\` 用于换行；
-- `\hline` 表示插入一个贯穿所有列的横着的分割线；
-- `\cline{1-2}` 会在第一列和第二列插入一个横着的分割线。
+-   `&` 用于分割列；
+-   `\\` 用于换行；
+-   `\hline` 表示插入一个贯穿所有列的横着的分割线；
+-   `\cline{1-2}` 会在第一列和第二列插入一个横着的分割线。
 
 最后使用 `\end{tabular}` 结束表格。举一些例子：
 
 ```tex
 \begin{tabular}{|l|l|}
-Apples & Green \\
-Strawberries & Red \\
-Orange & Orange\\
+  Apples       & Green  \\
+  Strawberries & Red    \\
+  Orange       & Orange \\
 \end{tabular}
 
 \begin{tabular}{rc}
-Apples & Green\\
-\hline 
-Strawberries & Red \\
-\cline{1-1}
-Oranges & Orange \\
+  Apples              & Green  \\
+  \hline
+  Strawberries        & Red    \\
+  \cline{1-1} Oranges & Orange \\
 \end{tabular}
 
 \begin{tabular}{|r|l|}
-\hline
-8 & here's \\
-\cline{2-2}
-86 & stuff\\
-\hline \hline 
-2008 & now \\
-\hline 
+  \hline
+  8              & here's \\
+  \cline{2-2} 86 & stuff  \\
+  \hline
+  \hline
+  2008           & now    \\
+  \hline
 \end{tabular}
 ```
 
@@ -515,10 +499,10 @@ Oranges & Orange \\
 
 ```tex
 \begin{figure}[h]
-\centering
-\includegraphics[width=1\textwidth]{myimage}
-\caption{Here is my image}
-\label{image-myimage}
+  \centering
+  \includegraphics[width=1\textwidth]{myimage}
+  \caption{Here is my image}
+  \label{image-myimage}
 \end{figure}
 ```
 
@@ -530,7 +514,7 @@ Oranges & Orange \\
 
 `[width=1\textwidth]` 是一个可选的参数，它指定图片的宽度——与文本的宽度相同。宽度也可以以厘米为单位。你也可以使用 `[scale=0.5]` 将图片按比例缩小（示例相当于缩小一半）。
 
-`\caption{...}` 定义了图表的标题。如果使用了它，LaTeX 会给你的图表添加“Figure”开头的序号。你可以使用 `\listoffigures` 来生成一个图表的目录。
+`\caption{...}` 定义了图表的标题。如果使用了它，LaTeX 会给你的图表添加「Figure」开头的序号。你可以使用 `\listoffigures` 来生成一个图表的目录。
 
 `\label{...}` 创建了一个可以供你引用的标签。
 
@@ -540,9 +524,9 @@ $\rightarrow$ 在你文档的前导命令中添加 `\usepackage{graphicx}`。$\r
 
 ```tex
 \begin{figure}[h!]
-\centering
-\includegraphics[width=1\textwidth]{ImageFilename}
-\caption{My test image}
+  \centering
+  \includegraphics[width=1\textwidth]{ImageFilename}
+  \caption{My test image}
 \end{figure}
 ```
 
@@ -564,11 +548,17 @@ $$
 1+2=3
 $$
 
-如果是生成带标号的公式，可以使用 `\begin{equation}...\end{equation}`。例如 `\begin{equation}1+2=3\end{equation}` 生成的效果为：
+如果是生成带标号的公式，可以使用 `\begin{equation}...\end{equation}`。例如：
 
-$$
-\begin{equation}1+2=3\end{equation}
-$$
+```tex
+\begin{equation}
+  1+2=3
+\end{equation}
+```
+
+生成的效果为：
+
+![equation](images/latex-equation.svg)
 
 数字 6 代表的是章节的编号，仅当你的文档有设置章节时才会出现，比如 **report** 类型的文档。
 
@@ -576,21 +566,34 @@ $$
 
 ```tex
 \begin{eqnarray}
-a & = & b + c \\
+  a & = & b + c \\
   & = & y - z
 \end{eqnarray}
 ```
 
 生成的效果为
 
-$$
-\begin{eqnarray}
-a & = & b + c \\
-  & = & y - z
-\end{eqnarray}
-$$
+![eqnarray](images/latex-eqnarray.svg)
 
 要撰写不标号的公式就在环境标志的后面添加 `*` 字符，如 `{equation*}`，`{eqnarray*}`。
+
+??? warning
+    可以发现，使用 `eqnarray` 时，会出现等号周围的空隙过大之类的问题。
+    
+    可以使用 `amsmath` 宏包中的 `align` 环境：
+    
+    ```tex
+    \usepackage{amsmath}
+    ...
+    \begin{align}
+      a & = b + c \\
+        & = y - z
+    \end{align}
+    ```
+    
+    或在行间公式中使用 `aligned` 环境。它们的名字后面加上星号后，公式就不带标号了。
+    
+    详见 [更多阅读](#更多阅读) 中第一篇资料的「4.4 多行公式」。
 
 ### 数学符号
 
@@ -656,14 +659,14 @@ $$
 
 我们可以使用反斜杠加希腊字母的名称来表示一个希腊字母。名称的首字母的大小写决定希腊字母的形态。例如
 
-- `$\alpha$`=$\alpha$
-- `$\beta$`=$\beta$
-- `$\delta, \Delta$`=$\delta, \Delta$
-- `$\pi, \Pi$`=$\pi, \Pi$
-- `$\sigma, \Sigma$`=$\sigma, \Sigma$
-- `$\phi, \Phi, \varphi$`=$\phi, \Phi, \varphi$
-- `$\psi, \Psi$`=$\psi, \Psi$
-- `$\omega, \Omega$`=$\omega, \Omega$
+-   `$\alpha$`=$\alpha$
+-   `$\beta$`=$\beta$
+-   `$\delta, \Delta$`=$\delta, \Delta$
+-   `$\pi, \Pi$`=$\pi, \Pi$
+-   `$\sigma, \Sigma$`=$\sigma, \Sigma$
+-   `$\phi, \Phi, \varphi$`=$\phi, \Phi, \varphi$
+-   `$\psi, \Psi$`=$\psi, \Psi$
+-   `$\omega, \Omega$`=$\omega, \Omega$
 
 ### 实践
 
@@ -671,7 +674,7 @@ $\rightarrow$ 撰写代码来生成下列公式：
 
 ![p15](images/latex-for-beginners-15.png)
 
-如果需要帮助，可以查看本书的 TeX 源码。
+如果需要帮助，可以查看本页面的 [源代码](https://github.com/OI-wiki/OI-wiki/blob/master/docs/tools/latex.md?plain=1)。
 
 ## 参考文献
 
@@ -760,16 +763,16 @@ $\rightarrow$ 在同一文件夹下新建一个同名的 BibTeX 文件，用正�
 
 ## 更多阅读
 
-一份（不太）简短的 LATEX 2ε 介绍 <https://github.com/CTeX-org/lshort-zh-cn/releases/download/v6.02/lshort-zh-cn.pdf> 或 112 分钟了解 LaTeX 2ε.
+-   一份（不太）简短的 LATEX 2ε 介绍 <https://github.com/CTeX-org/lshort-zh-cn/releases/download/v6.02/lshort-zh-cn.pdf> 或 112 分钟了解 LaTeX 2ε.
 
-LaTeX Project <http://www.latex-project.org/> Official website - has links to documentation, information about installing LATEX on your own computer, and information about where to look for help.
+-   LaTeX Project <http://www.latex-project.org/> Official website - has links to documentation, information about installing LATEX on your own computer, and information about where to look for help.
 
-LaTeX Wikibook <http://en.wikibooks.org/wiki/LaTeX/> Comprehensive and clearly written, although still a work in progress. A downloadable PDF is also available.
+-   LaTeX Wikibook <http://en.wikibooks.org/wiki/LaTeX/> Comprehensive and clearly written, although still a work in progress. A downloadable PDF is also available.
 
-Comparison of TeX Editors on Wikipedia <http://en.wikipedia.org/wiki/Comparison_of_TeX_editors> Information to help you to choose which L A TEX editor to install on your own computer.
+-   Comparison of TeX Editors on Wikipedia <http://en.wikipedia.org/wiki/Comparison_of_TeX_editors> Information to help you to choose which L A TEX editor to install on your own computer.
 
-TeX Live <http://www.tug.org/texlive/>“An easy way to get up and running with the TeX document production system”。Available for Unix and Windows (links to MacTeX for MacOSX users). Includes the TeXworks editor.
+-   TeX Live <http://www.tug.org/texlive/>"An easy way to get up and running with the TeX document production system". Available for Unix and Windows (links to MacTeX for MacOSX users). Includes the TeXworks editor.
 
-Workbook Source Files <http://edin.ac/17EQPM1> Download the .tex file and other files needed to compile this workbook.
+-   Workbook Source Files <http://edin.ac/17EQPM1> Download the .tex file and other files needed to compile this workbook.
 
-**本文译自 <http://www.docs.is.ed.ac.uk/skills/documents/3722/3722-2014.pdf>**，依据其他文献略有修改。
+**本文译自 [http://www.docs.is.ed.ac.uk/skills/documents/3722/3722-2014.pdf](https://web.archive.org/web/20220309055041/http://www.docs.is.ed.ac.uk/skills/documents/3722/3722-2014.pdf)**, 依据其他文献略有修改。

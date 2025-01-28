@@ -1,15 +1,15 @@
-## 最小树形图
+## 定义
 
 有向图上的最小生成树（Directed Minimum Spanning Tree）称为最小树形图。
 
 常用的算法是朱刘算法（也称 Edmonds 算法），可以在 $O(nm)$ 时间内解决最小树形图问题。
 
-### 流程
+## 过程
 
-1. 对于每个点，选择它入度最小的那条边
-2. 如果没有环，算法终止；否则进行缩环并更新其他点到环的距离。
+1.  对于每个点，选择指向它的边权最小的那条边。
+2.  如果没有环，算法终止；否则进行缩环并更新其他点到环的距离。
 
-### 代码
+## 实现
 
 ```cpp
 bool solve() {
@@ -64,6 +64,8 @@ Tarjan 提出了一种能够在 $O(m+n\log n)$ 时间内解决最小树形图问
 
 这里的算法描述以及参考代码基于 Uri Zwick 教授的课堂讲义，更多的细节可以参考原文。
 
+### 过程
+
 Tarjan 的算法分为 **收缩** 与 **伸展** 两个过程。接下来先介绍 **收缩** 的过程。
 
 我们需要假设输入的图是满足强连通的，如果不满足那么就加入 $O(n)$ 条边使其满足，并且这些边的边权是无穷大的。
@@ -76,9 +78,9 @@ Tarjan 的算法分为 **收缩** 与 **伸展** 两个过程。接下来先介�
 
 向队列 $P$ 中放入所有的结点或超级结点，并初始选择任意一节点 $a$，只要队列不为空，就进行以下步骤：
 
-1. 选择 $a$ 的最小入边，保证不存在自环，并找到另一头的结点 $b$。如果结点 $b$ 没有被记录过说明未形成环，令 $a\leftarrow b$，继续当前操作寻找环。
+1.  选择 $a$ 的最小入边，保证不存在自环，并找到另一头的结点 $b$。如果结点 $b$ 没有被记录过说明未形成环，令 $a\leftarrow b$，继续当前操作寻找环。
 
-2. 如果 $b$ 被记录过了，就说明出现了环。总结点数加一，并将环上的所有结点重新编号，对堆进行合并，以及结点/超级结点的总权值的更新。更新权值操作就是将环上所有结点的入边都收集起来，并减去环上入边的边权。
+2.  如果 $b$ 被记录过了，就说明出现了环。总结点数加一，并将环上的所有结点重新编号，对堆进行合并，以及结点/超级结点的总权值的更新。更新权值操作就是将环上所有结点的入边都收集起来，并减去环上入边的边权。
 
 ![dmst1](./images/dmst1.png)
 
@@ -86,32 +88,42 @@ Tarjan 的算法分为 **收缩** 与 **伸展** 两个过程。接下来先介�
 
 伸展过程是相对简单的，以原先要求的根节点 $r$ 为起始点，对 $r$ 到收缩树的根上的每一个环进行伸展。再以 $r$ 的祖先结点 $f_r$ 为起始点，将其到根的环展开，直到遍历完所有的结点。
 
-### 代码
+### 实现
 
 ```cpp
-#include <bits/stdc++.h>
-
+#include <cstdio>
+#include <cstring>
+#include <queue>
+#include <vector>
 using namespace std;
 
-typedef long long ll;
-#define maxn 102
-#define INF 0x3f3f3f3f
+using ll = long long;
+constexpr int MAXN = 102;
+constexpr int INF = 0x3f3f3f3f;
 
 struct UnionFind {
-  int fa[maxn << 1];
+  int fa[MAXN << 1];
+
   UnionFind() { memset(fa, 0, sizeof(fa)); }
+
   void clear(int n) { memset(fa + 1, 0, sizeof(int) * n); }
+
   int find(int x) { return fa[x] ? fa[x] = find(fa[x]) : x; }
+
   int operator[](int x) { return find(x); }
 };
+
 struct Edge {
   int u, v, w, w0;
 };
+
 struct Heap {
   Edge *e;
   int rk, constant;
   Heap *lch, *rch;
+
   Heap(Edge *_e) : e(_e), rk(1), constant(0), lch(NULL), rch(NULL) {}
+
   void push() {
     if (lch) lch->constant += constant;
     if (rch) rch->constant += constant;
@@ -119,6 +131,7 @@ struct Heap {
     constant = 0;
   }
 };
+
 Heap *merge(Heap *x, Heap *y) {
   if (!x) return y;
   if (!y) return x;
@@ -132,6 +145,7 @@ Heap *merge(Heap *x, Heap *y) {
     x->rk = 1;
   return x;
 }
+
 Edge *extract(Heap *&x) {
   Edge *r = x->e;
   x->push();
@@ -139,14 +153,14 @@ Edge *extract(Heap *&x) {
   return r;
 }
 
-vector<Edge> in[maxn];
-int n, m, fa[maxn << 1], nxt[maxn << 1];
-Edge *ed[maxn << 1];
-Heap *Q[maxn << 1];
+vector<Edge> in[MAXN];
+int n, m, fa[MAXN << 1], nxt[MAXN << 1];
+Edge *ed[MAXN << 1];
+Heap *Q[MAXN << 1];
 UnionFind id;
 
 void contract() {
-  bool mark[maxn << 1];
+  bool mark[MAXN << 1];
   // 将图上的每一个结点与其相连的那些结点进行记录。
   for (int i = 1; i <= n; i++) {
     queue<Heap *> q;
@@ -162,7 +176,7 @@ void contract() {
   }
   mark[1] = true;
   for (int a = 1, b = 1, p; Q[a]; b = a, mark[b] = true) {
-    //寻找最小入边以及其端点，保证无环。
+    // 寻找最小入边以及其端点，保证无环。
     do {
       ed[a] = extract(Q[a]);
       a = id[ed[a]->u];
@@ -181,6 +195,7 @@ void contract() {
 }
 
 ll expand(int x, int r);
+
 ll expand_iter(int x) {
   ll r = 0;
   for (int u = nxt[x]; u != x; u = nxt[u]) {
@@ -191,6 +206,7 @@ ll expand_iter(int x) {
   }
   return r;
 }
+
 ll expand(int x, int t) {
   ll r = 0;
   for (; x != t; x = fa[x]) {
@@ -199,6 +215,7 @@ ll expand(int x, int t) {
   }
   return r;
 }
+
 void link(int u, int v, int w) { in[v].push_back({u, v, w, w}); }
 
 int main() {
@@ -223,6 +240,6 @@ int main() {
 
 ## 参考文献
 
-Uri Zwick. (2013),[Directed Minimum Spanning Trees](http://www.cs.tau.ac.il/~zwick/grad-algo-13/directed-mst.pdf), Lecture notes on“Analysis of Algorithms”
+Uri Zwick. (2013),[Directed Minimum Spanning Trees](http://www.cs.tau.ac.il/~zwick/grad-algo-13/directed-mst.pdf), Lecture notes on "Analysis of Algorithms"
 
 <https://riteme.site/blog/2018-6-18/mdst.html#_3>

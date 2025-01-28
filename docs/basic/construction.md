@@ -1,8 +1,8 @@
-author: leoleoasd, yzxoi
+author: leoleoasd, yzxoi, Estrella-Explore
 
 本页面将简要介绍构造题这类题型。
 
-## 简介
+## 引入
 
 构造题是比赛中常见的一类题型。
 
@@ -22,7 +22,7 @@ author: leoleoasd, yzxoi
 
 ### 例题 1
 
-???+note "[Codeforces Round #384 (Div. 2) C.Vladik and fractions](http://codeforces.com/problemset/problem/743/C)"
+???+ note "[Codeforces Round #384 (Div. 2) C.Vladik and fractions](http://codeforces.com/problemset/problem/743/C)"
     构造一组 $x,y,z$，使得对于给定的 $n$，满足 $\dfrac{1}{x}+\dfrac{1}{y}+\dfrac{1}{z}=\dfrac{2}{n}$
 
 ??? note "解题思路"
@@ -34,10 +34,10 @@ author: leoleoasd, yzxoi
 
 ### 例题 2
 
-???+note "[Luogu P3599 Koishi Loves Construction](https://www.luogu.com.cn/problem/P3599)"
+???+ note "[Luogu P3599 Koishi Loves Construction](https://www.luogu.com.cn/problem/P3599)"
     Task1：试判断能否构造并构造一个长度为 $n$ 的 $1\dots n$ 的排列，满足其 $n$ 个前缀和在模 $n$ 的意义下互不相同
     
-    Taks2：试判断能否构造并构造一个长度为 $n$ 的 $1\dots n$ 的排列，满足其 $n$ 个前缀积在模 $n$ 的意义下互不相同
+    Task2：试判断能否构造并构造一个长度为 $n$ 的 $1\dots n$ 的排列，满足其 $n$ 个前缀积在模 $n$ 的意义下互不相同
 
 ??? note "解题思路"
     对于 task1：
@@ -72,22 +72,22 @@ author: leoleoasd, yzxoi
     
     我们考虑如何构造这个数列：
     
-    和 task1 同样的思路，我们发现 $1$ 必定出现在数列的第一位，否则 $1$ 出现前后的两个前缀积必然相等；而 $n$ 必定出现在数列的最后一位，因为 $n$ 出现位置后的所有前缀积在模意义下都为 $0$。手玩几组样例以后发现，所有样例中均有一组合法解满足前缀积在模意义下为 $1,2,3,\cdots,n$，因此我们可以构造出上文所述的数列来满足这个条件。那么我们只需证明这 $n$ 个数互不相同即可。
+    和 task1 同样的思路，我们发现 $1$ 必定出现在数列的第一位，否则 $1$ 出现前后的两个前缀积必然相等；而 $n$ 必定出现在数列的最后一位，因为 $n$ 出现位置后的所有前缀积在模意义下都为 $0$。分析题目给出的几组样例以后发现，所有样例中均有一组合法解满足前缀积在模意义下为 $1,2,3,\cdots,n$，因此我们可以构造出上文所述的数列来满足这个条件。那么我们只需证明这 $n$ 个数互不相同即可。
     
     我们发现这些数均为 $1 \cdots n-2$ 的逆元 $+1$，因此各不相同，此题得解。
 
 ### 例题 3
 
-???+note "[AtCoder Grand Contest 032 B](https://atcoder.jp/contests/agc032/tasks/agc032_b)"
+???+ note "[AtCoder Grand Contest 032 B](https://atcoder.jp/contests/agc032/tasks/agc032_b)"
     给定一个整数 $N$，试构造一个节点数为 $N$ 无向图。令节点编号为 $1\ldots N$，要求其满足以下条件：
     
-    - 这是一个简单连通图。
-    - 存在一个整数 $S$ 使得对于任意节点，与其相邻节点的下标和为 $S$。
+    -   这是一个简单连通图。
+    -   存在一个整数 $S$ 使得对于任意节点，与其相邻节点的下标和为 $S$。
     
     保证输入数据有解。
 
 ??? note "解题思路"
-    手玩一下 $n=3,4,5$ 的情况，我们可以找到一个构造思路。
+    通过分析 $n=3,4,5$ 的情况，我们可以找到一个构造思路。
     
     构造一个完全 $k$ 分图，保证这 $k$ 部分和相等。则每个点的 $S$ 均相等，为 $\dfrac{(k-1)\sum_{i=1}^{n}i}{k}$。
     
@@ -101,7 +101,7 @@ author: leoleoasd, yzxoi
 
 ### 例题 4
 
-???+note "BZOJ 4971「Lydsy1708 月赛」记忆中的背包"
+???+ note "[BZOJ 4971「Lydsy1708 月赛」记忆中的背包](https://vjudge.net/problem/BZOJ-4971)"
     经过一天辛苦的工作，小 Q 进入了梦乡。他脑海中浮现出了刚进大学时学 01 背包的情景，那时还是大一萌新的小 Q 解决了一道简单的 01 背包问题。这个问题是这样的：
     
     给定 $n$ 个物品，每个物品的体积分别为 $v_1,v_2,…,v_n$，请计算从中选择一些物品（也可以不选），使得总体积恰好为 $w$ 的方案数。因为答案可能非常大，你只需要输出答案对 $P$ 取模的结果。
@@ -115,7 +115,7 @@ author: leoleoasd, yzxoi
     
     通过奇怪的方式，我们想到可以通过构造 $n$ 个 代价为 $1$ 的小物品和几个代价大于 $\dfrac{w}{2}$ 的大物品。
     
-    由于大物品只能取一件，所以每个代价为 $x$ 的大物品对方案数的贡献为 $C_{n}^{w-x}$。
+    由于大物品只能取一件，所以每个代价为 $x$ 的大物品对方案数的贡献为 $\dbinom{n}{w-x}$。
     
     令 $f_{i,j}$ 表示有 $i$ 个 $1$，方案数为 $j$ 的最小大物品数。
     

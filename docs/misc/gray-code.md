@@ -18,14 +18,14 @@ $$
 
 $k$ 位的格雷码可以通过以下方法构造。我们从全 $0$ 格雷码开始，按照下面策略：
 
-1. 翻转最低位得到下一个格雷码，（例如 $000\to 001$）；
-2. 把最右边的 $1$ 的左边的位翻转得到下一个格雷码，（例如 $001\to 011$）；
+1.  翻转最低位得到下一个格雷码，（例如 $000\to 001$）；
+2.  把最右边的 $1$ 的左边的位翻转得到下一个格雷码，（例如 $001\to 011$）；
 
-交替按照上述策略生成 $2^k-1$ 次，可得到 $k$ 位的格雷码序列。
+交替按照上述策略生成 $2^{k-1}$ 次，可得到 $k$ 位的格雷码序列。
 
 ### 镜像构造
 
-$k$ 位的格雷码可以从 $k-1$ 位的格雷码以上下镜射后加上新位的方式快速的得到，如下图：
+$k$ 位的格雷码可以从 $k-1$ 位的格雷码以上下镜射后加上新位的方式快速得到，如下图：
 
 $$
 \begin{matrix}
@@ -67,10 +67,10 @@ int g(int n) { return n ^ (n >> 1); }
 我们考虑 $n$ 和 $n+1$ 的区别。把 $n$ 加 $1$，相当于把 $n$ 的二进制下末位的连续的 $1$ 全部变成取反，然后把最低位的 $0$ 变成 $1$。我们这样表示 $n$ 和 $n+1$ 的二进制位：
 
 $$
-\begin{array}{rll}
-(n)_2&=&\cdots0\underbrace{11\cdots11}_{k\text{个}}\\
-(n+1)_2&=&\cdots1\underbrace{00\cdots00}_{k\text{个}}
-\end{array}
+\begin{aligned}
+(n)_2 &= \cdots0\underbrace{11\cdots11}_{k\text{个}}\\
+(n+1)_2 &= \cdots1\underbrace{00\cdots00}_{k\text{个}}
+\end{aligned}
 $$
 
 于是我们在计算 $g(n)$ 和 $g(n+1)$ 的时侯，后 $k$ 位都会变成 $\displaystyle\underbrace{100\cdots00}_{k\text{个}}$ 的形式，而第 $k+1$ 位是不同的，因为 $n$ 和 $n+1$ 除了后 $k+1$ 位，其他位都是相同的。因此第 $k+1$ 位要么同时异或 $1$，要么同时异或 $0$。两种情况，第 $k+1$ 位都是不同的。而除了后 $k+1$ 位以外的二进制位也是做相同的异或运算，结果是相同的。
@@ -82,14 +82,14 @@ $$
 接下来我们考虑格雷码的逆变换，即给你一个格雷码 $g$，要求你找到原数 $n$。我们考虑从二进制最高位遍历到最低位（最低位下标为 $1$，即个位；最高位下标为 $k$）。则 $n$ 的二进制第 $i$ 位与 $g$ 的二进制第 $i$ 位 $g_i$ 的关系如下：
 
 $$
-\begin{array}{rll}
+\begin{aligned}
 n_k &= g_k \\
-n_{k-1} &= g_{k-1} \oplus n_k &= g_k \oplus g_{k-1} \\
-n_{k-2} &= g_{k-2} \oplus n_{k-1} &= g_k \oplus g_{k-1} \oplus g_{k-2} \\
-n_{k-3} &= g_{k-3} \oplus n_{k-2} &= g_k \oplus g_{k-1} \oplus g_{k-2} \oplus g_{k-3} \\
+n_{k-1} &= g_{k-1} \oplus n_k &&= g_k \oplus g_{k-1} \\
+n_{k-2} &= g_{k-2} \oplus n_{k-1} &&= g_k \oplus g_{k-1} \oplus g_{k-2} \\
+n_{k-3} &= g_{k-3} \oplus n_{k-2} &&= g_k \oplus g_{k-1} \oplus g_{k-2} \oplus g_{k-3} \\
 &\vdots\\
 n_{k-i} &=\displaystyle\bigoplus_{j=0}^ig_{k-j}
-\end{array}
+\end{aligned}
 $$
 
 ```cpp
@@ -104,9 +104,9 @@ int rev_g(int g) {
 
 格雷码有一些十分有用的应用，有些应用让人意想不到：
 
-- $k$ 位二进制数的格雷码序列可以当作 $k$ 维空间中的一个超立方体（二维里的正方形，一维里的单位向量）顶点的哈密尔顿回路，其中格雷码的每一位代表一个维度的坐标。
+-   $k$ 位二进制数的格雷码序列可以当作 $k$ 维空间中的一个超立方体（二维里的正方形，一维里的单位向量）顶点的哈密尔顿回路，其中格雷码的每一位代表一个维度的坐标。
 
-- 格雷码被用于最小化数字模拟转换器（比如传感器）的信号传输中出现的错误，因为它每次只改变一个位。
+-   格雷码被用于最小化数字模拟转换器（比如传感器）的信号传输中出现的错误，因为它每次只改变一个位。
 
 -   格雷码可以用来解决汉诺塔的问题。
 
@@ -118,12 +118,12 @@ int rev_g(int g) {
 
     如果 $n$ 是偶数：$f \to r \to t \to f \to r \to t \to \cdots$
 
-- 格雷码也在遗传算法理论中得到应用。
+-   格雷码也在遗传算法理论中得到应用。
 
 ## 习题
 
-- [CSP S2 2019 D1T1](https://www.luogu.com.cn/problem/P5657) Difficulty: easy
+-   [CSP S2 2019 D1T1](https://www.luogu.com.cn/problem/P5657) Difficulty: easy
 
-- [SGU #249 Matrix](http://codeforces.com/problemsets/acmsguru/problem/99999/249) Difficulty: medium
+-   [SGU #249 Matrix](http://codeforces.com/problemsets/acmsguru/problem/99999/249) Difficulty: medium
 
 > 本页面部分内容译自博文 [Код Грея](http://e-maxx.ru/algo/gray_code) 与其英文翻译版 [Gray code](https://cp-algorithms.com/algebra/gray-code.html)。其中俄文版版权协议为 Public Domain + Leave a Link；英文版版权协议为 CC-BY-SA 4.0。

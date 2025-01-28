@@ -4,11 +4,15 @@ author: Ir1d, ouuan, qinggniq, i-Yirannn, minghu6
 
 ### 字符集
 
-一个 **字符集** $\Sigma$ 是一个建立了全序关系的集合，也就是说，$\Sigma$ 中的任意两个不同的元素 $\alpha$ 和 $\beta$ 都可以比较大小，要么 $\alpha<\beta$，要么 $\beta<\alpha$。字符集 $\Sigma$ 中的元素称为字符。
+一个 **字符集** $\Sigma$ 是一个建立了 [全序](../math/order-theory.md#偏序集) 关系的集合，也就是说，$\Sigma$ 中的任意两个不同的元素 $\alpha$ 和 $\beta$ 都可以比较大小，要么 $\alpha<\beta$，要么 $\beta<\alpha$。字符集 $\Sigma$ 中的元素称为字符。
 
 ### 字符串
 
-一个 **字符串**  $S$ 是将 $n$ 个字符顺次排列形成的序列，$n$ 称为 $S$ 的长度，表示为 $|S|$。$S$ 的第 $i$ 个字符表示为 $S[i]$。（在有的地方，也会用 $S[i-1]$ 表示第 $i$ 个字符。）
+一个 **字符串**  $S$ 是将 $n$ 个字符顺次排列形成的序列，$n$ 称为 $S$ 的长度，表示为 $|S|$。
+
+如果字符串下标从 $1$ 开始计算，$S$ 的第 $i$ 个字符表示为 $S[i]$；
+
+如果字符串下标从 $0$ 开始计算，$S$ 的第 $i$ 个字符表示为 $S[i-1]$。
 
 ### 子串
 
@@ -30,7 +34,7 @@ author: Ir1d, ouuan, qinggniq, i-Yirannn, minghu6
 
 ### 前缀
 
-**前缀** 是指从串首开始到某个位置 $i$ 结束的一个特殊子串。字符串 $S$ 的以 $i$ 结尾的前缀表示为 $\textit{Preffix(S,i)}$，也就是 $\textit{Preffix(S,i)}=S[0..i]$。
+**前缀** 是指从串首开始到某个位置 $i$ 结束的一个特殊子串。字符串 $S$ 的以 $i$ 结尾的前缀表示为 $\textit{Prefix(S,i)}$，也就是 $\textit{Prefix(S,i)}=S[0..i]$。
 
 **真前缀** 指除了 $S$ 本身的 $S$ 的前缀。
 
@@ -46,10 +50,10 @@ author: Ir1d, ouuan, qinggniq, i-Yirannn, minghu6
 
 ## 字符串的存储
 
-- 使用 `char` 数组存储，用空字符 `\0` 表示字符串的结尾（C 风格字符串）。
-- 使用 C++ 标准库提供的 [`string` 类](../lang/csl/string.md)。
-- 字符串常量可以用字符串字面量（用双引号括起来的字符串）表示。
+-   使用 `char` 数组存储，用空字符 `\0` 表示字符串的结尾（C 风格字符串）。
+-   使用 C++ 标准库提供的 [`string` 类](../lang/csl/string.md)。
+-   字符串常量可以用字符串字面量（用双引号括起来的字符串）表示。
 
 ## 参考资料与注释
 
-- [后缀数组 by. 徐智磊](https://wenku.baidu.com/view/0dc03d2b1611cc7931b765ce0508763230127479.html)
+-   [后缀数组 by. 徐智磊](https://wenku.baidu.com/view/0dc03d2b1611cc7931b765ce0508763230127479.html)

@@ -2,11 +2,17 @@ author: Chrogeek, frank-xjh, ChungZH, hsfzLZH1, Marcythm, Planet6174, partychick
 
 ## 欧氏距离
 
+### 二维空间
+
+#### 定义
+
 欧氏距离，一般也称作欧几里得距离。在平面直角坐标系中，设点 $A,B$ 的坐标分别为 $A(x_1,y_1),B(x_2,y_2)$，则两点间的欧氏距离为：
 
 $$
 \left | AB \right | = \sqrt{\left ( x_2 - x_1 \right )^2 + \left ( y_2 - y_1 \right )^2}
 $$
+
+#### 解释
 
 举个例子，若在平面直角坐标系中，有两点 $A(6,5),B(2,2)$，通过公式，我们很容易得到 $A,B$ 两点间的欧氏距离：
 
@@ -19,6 +25,10 @@ $$
 $$
 |P| = \sqrt{x^2+y^2}
 $$
+
+### n 维空间
+
+#### 引入
 
 那么，三维空间中两点的欧氏距离公式呢？我们来观察下图。
 
@@ -33,6 +43,8 @@ $$
 \end{aligned}
 $$
 
+#### 定义
+
 由此可得，三维空间中欧氏距离的距离公式为：
 
 $$
@@ -41,6 +53,8 @@ $$
 |P| = \sqrt{x^2+y^2+z^2}
 \end{gathered}
 $$
+
+#### 解释
 
 [NOIP2017 提高组 奶酪](https://uoj.ac/problem/332) 就运用了这一知识，可以作为欧氏距离的例题。
 
@@ -57,11 +71,15 @@ $$
 
 ## 曼哈顿距离
 
+### 定义
+
 在二维空间内，两个点之间的曼哈顿距离（Manhattan distance）为它们横坐标之差的绝对值与纵坐标之差的绝对值之和。设点 $A(x_1,y_1),B(x_2,y_2)$，则 $A,B$ 之间的曼哈顿距离用公式可以表示为：
 
 $$
 d(A,B) = |x_1 - x_2| + |y_1 - y_2|
 $$
+
+### 解释
 
 观察下图：
 
@@ -87,6 +105,8 @@ d(A,B) &= |x_1 - y_1| + |x_2 - y_2| + \cdot \cdot \cdot + |x_n - y_n|\\
 &= \sum_{i = 1}^{n}|x_i - y_i|
 \end{aligned}
 $$
+
+### 性质
 
 除了公式之外，曼哈顿距离还具有以下数学性质：
 
@@ -120,32 +140,53 @@ $$
 
 根据题意，对于式子 $|x_1-x_2|+|y_1-y_2|$，我们可以假设 $x_1 - x_2 \geq 0$，根据 $y_1 - y_2$ 的符号分成两种情况：
 
-- $(y_1 - y_2 \geq 0)\rightarrow |x_1-x_2|+|y_1-y_2|=x_1 + y_1 - (x_2 + y_2)$
+-   $(y_1 - y_2 \geq 0)\rightarrow |x_1-x_2|+|y_1-y_2|=x_1 + y_1 - (x_2 + y_2)$
 
-- $(y_1 - y_2 < 0)\rightarrow |x_1-x_2|+|y_1-y_2|=x_1 - y_1 - (x_2 - y_2)$
+-   $(y_1 - y_2 < 0)\rightarrow |x_1-x_2|+|y_1-y_2|=x_1 - y_1 - (x_2 - y_2)$
 
 只要分别求出 $x+y, x-y$ 的最大值和最小值即能得出答案。
 
 ??? note "参考代码"
-    ```cpp
-    #include <bits/stdc++.h>
-    using namespace std;
-    int main() {
-      int n, x, y, minx = 0x7fffffff, maxx = 0, miny = 0x7fffffff, maxy = 0;
-      scanf("%d", &n);
-      for (int i = 1; i <= n; i++) {
-        scanf("%d%d", &x, &y);
-        minx = min(minx, x + y), maxx = max(maxx, x + y);
-        miny = min(miny, x - y), maxy = max(maxy, x - y);
-      }
-      printf("%d\n", max(maxx - minx, maxy - miny));
-      return 0;
-    }
-    ```
+    === "C++"
+        ```cpp
+        #include <algorithm>
+        #include <cstdio>
+        using namespace std;
+        
+        int main() {
+          int n, x, y, minx = 0x7fffffff, maxx = 0, miny = 0x7fffffff, maxy = 0;
+          scanf("%d", &n);
+          for (int i = 1; i <= n; i++) {
+            scanf("%d%d", &x, &y);
+            minx = min(minx, x + y), maxx = max(maxx, x + y);
+            miny = min(miny, x - y), maxy = max(maxy, x - y);
+          }
+          printf("%d\n", max(maxx - minx, maxy - miny));
+          return 0;
+        }
+        ```
+    
+    === "Python"
+        ```python
+        minx = 0x7FFFFFFF
+        maxx = 0
+        miny = 0x7FFFFFFF
+        maxy = 0
+        n = int(input())
+        for i in range(1, n + 1):
+            x, y = map(lambda x: int(x), input().split())
+            minx = min(minx, x + y)
+            maxx = max(maxx, x + y)
+            miny = min(miny, x - y)
+            maxy = max(maxy, x - y)
+        print(max(maxx - minx, maxy - miny))
+        ```
 
 其实还有第二种做法，那就是把曼哈顿距离转化为切比雪夫距离求解，最后部分会讲到。
 
 ## 切比雪夫距离
+
+### 定义
 
 切比雪夫距离（Chebyshev distance）是向量空间中的一种度量，二个点之间的距离定义为其各坐标数值差的最大值。[^ref1]
 
@@ -155,6 +196,16 @@ $$
 d(A,B) = \max(|x_1 - x_2|, |y_1 - y_2|)
 $$
 
+$n$ 维空间中切比雪夫距离的距离公式可以表示为：
+
+$$
+\begin{aligned}
+d(x,y) &= \max\begin{Bmatrix} |x_1 - y_1|,|x_2 - y_2|,\cdot \cdot \cdot,|x_n - y_n|\end{Bmatrix} \\
+&= \max\begin{Bmatrix} |x_i - y_i|\end{Bmatrix}(i \in [1, n])\end{aligned}
+$$
+
+### 解释
+
 仍然是这个例子，下图中 $A,B$ 的坐标分别为 $A(25,20),B(10,10)$。
 
 ![Chebyshev-dis](./images/distance-2.svg)
@@ -163,15 +214,9 @@ $$
 d(A,B) = \max(|20 - 10|, |25 - 10|) = \max(10, 15) = 15
 $$
 
-$n$ 维空间中切比雪夫距离的距离公式：
-
-$$
-\begin{aligned}
-d(x,y) &= \max\begin{Bmatrix} |x_1 - y_1|,|x_2 - y_2|,\cdot \cdot \cdot,|x_n - y_n|\end{Bmatrix} \\
-&= \max\begin{Bmatrix} |x_i - y_i|\end{Bmatrix}(i \in [1, n])\end{aligned}
-$$
-
 ## 曼哈顿距离与切比雪夫距离的相互转化
+
+### 过程
 
 首先，我们考虑画出平面直角坐标系上所有到原点的曼哈顿距离为 $1$ 的点。
 
@@ -198,7 +243,7 @@ $$
 
 通过公式，我们知道 $\max(|x|,|y|)=1$。
 
-我们将式子展开，也同样可以得到可以得到 $4$ 条 线段，分别是：
+我们将式子展开，也同样可以得到 $4$ 条线段，分别是：
 
 $$
 \begin{aligned}
@@ -218,6 +263,8 @@ $$
 将这两幅图对比，我们会神奇地发现：
 
 这 $2$ 个正方形是相似图形。
+
+### 证明
 
 所以，曼哈顿距离与切比雪夫距离之间会不会有联系呢？
 
@@ -254,9 +301,9 @@ $$
 
 ### 结论
 
-- 曼哈顿坐标系是通过切比雪夫坐标系旋转 $45^\circ$ 后，再缩小到原来的一半得到的。
-- 将一个点 $(x,y)$ 的坐标变为 $(x + y, x - y)$ 后，原坐标系中的曼哈顿距离等于新坐标系中的切比雪夫距离。
-- 将一个点 $(x,y)$ 的坐标变为 $(\dfrac{x + y}{2},\dfrac{x - y}{2})$ 后，原坐标系中的切比雪夫距离等于新坐标系中的曼哈顿距离。
+-   曼哈顿坐标系是通过切比雪夫坐标系旋转 $45^\circ$ 后，再缩小到原来的一半得到的。
+-   将一个点 $(x,y)$ 的坐标变为 $(x + y, x - y)$ 后，原坐标系中的曼哈顿距离等于新坐标系中的切比雪夫距离。
+-   将一个点 $(x,y)$ 的坐标变为 $(\dfrac{x + y}{2},\dfrac{x - y}{2})$ 后，原坐标系中的切比雪夫距离等于新坐标系中的曼哈顿距离。
 
 碰到求切比雪夫距离或曼哈顿距离的题目时，我们往往可以相互转化来求解。两种距离在不同的题目中有不同的优缺点，应该灵活运用。
 
@@ -275,32 +322,61 @@ $$
 现要使得横坐标之差和纵坐标之差最大，只需要预处理出 $x,y$ 的最大值和最小值即可。
 
 ??? note "参考代码"
-    ```cpp
-    #include <bits/stdc++.h>
-    using namespace std;
-    int main() {
-      int n, x, y, a, b, minx = 0x7fffffff, maxx = 0, miny = 0x7fffffff, maxy = 0;
-      scanf("%d", &n);
-      for (int i = 1; i <= n; i++) {
-        scanf("%d%d", &a, &b);
-        x = a + b, y = a - b;
-        minx = min(minx, x), maxx = max(maxx, x);
-        miny = min(miny, y), maxy = max(maxy, y);
-      }
-      printf("%d\n", max(maxx - minx, maxy - miny));
-      return 0;
-    }
-    ```
+    === "C++"
+        ```cpp
+        #include <algorithm>
+        #include <cstdio>
+        using namespace std;
+        
+        int main() {
+          int n, x, y, a, b, minx = 0x7fffffff, maxx = 0, miny = 0x7fffffff, maxy = 0;
+          scanf("%d", &n);
+          for (int i = 1; i <= n; i++) {
+            scanf("%d%d", &a, &b);
+            x = a + b, y = a - b;
+            minx = min(minx, x), maxx = max(maxx, x);
+            miny = min(miny, y), maxy = max(maxy, y);
+          }
+          printf("%d\n", max(maxx - minx, maxy - miny));
+          return 0;
+        }
+        ```
+    
+    === "Python"
+        ```python
+        minx = 0x7FFFFFFF
+        maxx = 0
+        miny = 0x7FFFFFFF
+        maxy = 0
+        n = int(input())
+        for i in range(1, n + 1):
+            a, b = map(lambda x: int(x), input().split())
+            x = a + b
+            y = a - b
+            minx = min(minx, x)
+            maxx = max(maxx, x)
+            miny = min(miny, y)
+            maxy = max(maxy, y)
+        print(max(maxx - minx, maxy - miny))
+        ```
 
 对比两份代码，我们又能够发现，两种不同的思路，写出来的代码却是完全等价的，是不是很神奇呢？当然，更高深的东西需要大家另行研究。
 
-## $L_m$ 距离
+## 闵可夫斯基距离
 
-一般地，我们定义平面上两点 $A(x_1, y_1)$，$B(x_2, y_2)$ 之间的 $L_m$ 距离为
+我们定义 $n$ 维空间中两点 $X(x_1, x_2, \dots, x_n)$，$Y(y_1, y_2, \dots, y_n)$ 之间的闵可夫斯基距离为：
 
-$d(L_m) = (|x_1-x_2|^m+|y_1-y_2|^m)^{\frac{1}{m}}$
+$$
+D(X, Y) = \left(\sum_{i=1}^n \left\vert x_i - y_i \right\vert ^p\right)^{\frac{1}{p}}.
+$$
 
-特殊的，$L_2$ 距离就是欧几里得距离，$L_1$ 距离就是曼哈顿距离。
+特别的：
+
+1.  当 $p=1$ 时，$D(X, Y) = \sum_{i=1}^n \left\vert x_i - y_i \right\vert$ 即为曼哈顿距离；
+2.  当 $p=2$ 时，$D(X, Y) = \left(\sum_{i=1}^n (x_i - y_i)^2\right)^{1/2}$ 即为欧几里得距离；
+3.  当 $p \to \infty$ 时，$D(X, Y) = \lim_{p \to \infty}\left(\sum_{i=1}^n \left\vert x_i - y_i \right\vert ^p\right) ^{1/p} = \max\limits_{i=1}^n \left\vert x_i - y_i \right\vert$ 即为切比雪夫距离。
+
+注意：当 $p \ge 1$ 时，闵可夫斯基距离才是度量，具体证明参见 [Minkowski distance - Wikipedia](https://en.wikipedia.org/wiki/Minkowski_distance)。
 
 ## 汉明距离
 
@@ -308,8 +384,8 @@ $d(L_m) = (|x_1-x_2|^m+|y_1-y_2|^m)^{\frac{1}{m}}$
 
 我们可以简单的认为对两个串进行异或运算，结果为 1 的数量就是两个串的汉明距离。
 
-部分内容搬运自 [浅谈三种常见的距离算法](https://www.luogu.com.cn/blog/xuxing/Distance-Algorithm)，感谢作者 xuxing 的授权。
+## 参考资料与链接
 
-## 参考资料
+1.  [浅谈三种常见的距离算法](https://www.luogu.com.cn/blog/xuxing/Distance-Algorithm)，感谢作者 xuxing 的授权。
 
 [^ref1]: [切比雪夫距离 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E5%88%87%E6%AF%94%E9%9B%AA%E5%A4%AB%E8%B7%9D%E7%A6%BB)
